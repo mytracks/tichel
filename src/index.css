@@ -1,0 +1,74 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  vertical-align: middle;
+  align-content: center;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.TichelCanvas {
+  box-sizing: border-box;
+  display: grid;
+  /*grid-template-columns: 200px 200px 200px;*/
+}
+
+.EmptyCell {
+  border: solid lightgrey 2px;
+  border-radius: 8px;
+  margin: 4px;
+}
+
+.ParticipatesCell {
+  border: solid lightgrey 2px;
+  border-radius: 8px;
+  margin: 4px;
+  padding: 8px;
+}
+
+.ParticipatesCell__Selection {
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+}
+
+.DateCell {
+  border: solid lightgrey 2px;
+  border-radius: 8px;
+  margin: 4px;
+  padding: 8px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  text-align: center;
+}
+
+.DateCell__Month {
+  font-size: 0.8em;
+}
+
+.DateCell__Day {
+  font-size: 1.8em;
+  font-weight: bold;
+}
+
+.DateCell__DayOfWeek {
+  font-size: 0.8em;
+  color: gray;
+}
+
+.ParticipantCell {
+  box-sizing: border-box;
+  /*width: 80px;*/
+  border: solid lightgrey 2px;
+  border-radius: 8px;
+  margin: 4px;
+  padding: 8px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  text-align: center;
+}

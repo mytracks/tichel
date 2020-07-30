@@ -1,0 +1,16 @@
+{
+  "recommendations": [
+    // intellisense for npm packages and relative paths
+    "christian-kohler.npm-intellisense",
+    "christian-kohler.path-intellisense",
+    // allows to view svg files as images, not as code
+    "cssho.vscode-svgviewer",
+    // eslint and prettier integration
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    // syntax highlighting, intellisense for styled components
+    "jpoissonnier.vscode-styled-components",
+    // debug javascript in chrome
+    "msjsdiag.debugger-for-chrome"
+  ]
+}
