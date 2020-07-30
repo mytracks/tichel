@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { gql, useQuery, useMutation } from '@apollo/client';
+import { v4 as uuid } from 'uuid'
 import TichelCanvas from './TichelCanvas';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Avatar from '@material-ui/core/Avatar';
@@ -12,70 +11,15 @@ import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
-
-const createGuid = () => {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c)
- {
-        var r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
-        return v.toString(16);
-    });
-}
-
-const GET_TICHEL = gql`
-{
-  tichels {
-    title
-    id
-    times {
-      start
-      end
-      id
-      participations {
-        type
-        id
-        participant {
-          id
-        }
-      }
-    }
-    participants {
-      name
-      id
-    }
-  }
-}
-`;
-
-const ADD_PARTICIPATION = gql`
-  mutation AddParticipation($participantId: uuid!, $timesId: uuid!) {
-    insert_participants2times_one(object: {participant_id: $participantId, times_id: $timesId, type: 1}) {
-      id
-    }
-  }
-`;
-
-const DELETE_PARTICIPATION = gql`
-  mutation DeleteParticipation($id: uuid!) {
-    delete_participants2times_by_pk(id: $id) {
-      id
-    }
-  }
-`;
-
-const NEW_PARTICIPANT = gql`
-  mutation NewParticipant($participantId: uuid!, $name: String!, $tichelId: uuid!) {
-    insert_participants_one(object: {id: $participantId, name: $name, tichel_id: $tichelId}) {
-      id
-    }
-  }
-`;
+import useGetTichel from './TichelClient/useGetTichel'
+import useAddParticipation from './TichelClient/useAddParticipation'
+import useDeleteParticipation from './TichelClient/useDeleteParticipation'
+import useNewParticipant from './TichelClient/useNewParticipant'
 
 const TichelCard = styled(Card)`
   width: 345;
   margin: 20px;
 `
-
-
 const Tichel = ({ match }) => {
   const changeParticipation = (participant, time) => {
     setTichel( currentTichel => {
@@ -102,6 +46,7 @@ const Tichel = ({ match }) => {
           if (!didParticipate) {
             let newParticipation = {
               type: 1,
+              id: uuid(),
               participant: {
                 id: participant.id
               }
@@ -120,30 +65,23 @@ const Tichel = ({ match }) => {
       }
 
       return {
-        title: currentTichel.title,
-        id: currentTichel.id,
+        ...currentTichel,
         times: times,
-        participants: currentTichel.participants
       }
     })
   }
 
   const participationChanged = (participant, time) => {
-    console.log(`Tichel: ${participant.name}: Time ${time.start.toString()} clicked. ${tichel.title}`)
     changeParticipation(participant, time)
   }
 
   const handleNewParticipant = (name) => {
-    console.log(`New participant ${name}`)
-
     setTichel(currentTichel => { 
-      const participantId = createGuid()
+      const participantId = uuid()
       newParticipant({ variables: { participantId: participantId, name: name, tichelId: currentTichel.id } });
 
       return {
-        title: currentTichel.title,
-        id: currentTichel.id,
-        times: currentTichel.times,
+        ...currentTichel,
         participants: [...currentTichel.participants, {
           name: name,
           id: participantId
@@ -154,38 +92,10 @@ const Tichel = ({ match }) => {
   const [tichel, setTichel] = useState()
   const id = match.params.id;
 
-  const { loading, error, data } = useQuery(GET_TICHEL, {
-      context: { 
-        headers: { 
-          "X-Hasura-Tichel-Id": id
-        } 
-      },
-      onCompleted: (data) => { setTichel(data.tichels[0]); console.log("tichel loaded") }
-  })
-
-  const [ addParticipation, { addParticipationData } ] = useMutation(ADD_PARTICIPATION, {
-      context: { 
-        headers: { 
-          "X-Hasura-Tichel-Id": id
-        } 
-      }
-  });
-
-  const [ deleteParticipation, { deleteParticipationData } ] = useMutation(DELETE_PARTICIPATION, {
-      context: { 
-        headers: { 
-          "X-Hasura-Tichel-Id": id
-        } 
-      }
-  });
-
-  const [ newParticipant, { newParticipantData } ] = useMutation(NEW_PARTICIPANT, {
-      context: { 
-        headers: { 
-          "X-Hasura-Tichel-Id": id
-        } 
-      }
-  });
+  const { loading, error } = useGetTichel(id, ({tichel}) => setTichel(tichel))
+  const [ addParticipation ] = useAddParticipation(id);
+  const [ deleteParticipation ] = useDeleteParticipation(id)
+  const [ newParticipant ] = useNewParticipant(id)
 
   if (loading) return 'Loading...';
   if (error) return `Error! ${error.message}`;

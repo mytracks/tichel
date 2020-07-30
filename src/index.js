@@ -7,9 +7,6 @@ import Tichel from './Tichel';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
-// import DateFnsUtils from '@date-io/date-fns';
-import MomentUtils from '@date-io/moment';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 const cache = new InMemoryCache();
 
