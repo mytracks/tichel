@@ -1,5 +1,4 @@
 import React from 'react'
-import EmptyCell from './EmptyCell'
 import ParticipantCell from './ParticipantCell'
 import ParticipatesCell from './ParticipatesCell'
 
@@ -33,7 +32,6 @@ const ParticipantRow = ({
           clickHandler={() => participationClicked(time)}
         />
       ))}
-      <EmptyCell key="NewDateColumn" />
     </React.Fragment>
   )
 }

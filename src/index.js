@@ -1,4 +1,5 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
+import CssBaseline from '@material-ui/core/CssBaseline'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {
@@ -12,7 +13,6 @@ import Main from './Main'
 import NewTichel from './NewTichel'
 import * as serviceWorker from './serviceWorker'
 import Tichel from './Tichel'
-
 const cache = new InMemoryCache()
 
 const client = new ApolloClient({
@@ -25,6 +25,7 @@ const client = new ApolloClient({
 
 const element = (
   <ApolloProvider client={client}>
+    <CssBaseline />
     <Router>
       <div>
         <Switch>

@@ -1,4 +1,5 @@
 import Avatar from '@material-ui/core/Avatar'
+import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -9,6 +10,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert'
 import ShareIcon from '@material-ui/icons/Share'
 import React, { useReducer } from 'react'
 import styled from 'styled-components'
+import NewTimeDialog from './NewTimeDialog'
 import TichelCanvas from './TichelCanvas'
 import useAddParticipation from './TichelClient/useAddParticipation'
 import useDeleteParticipation from './TichelClient/useDeleteParticipation'
@@ -69,16 +71,23 @@ const Tichel = ({ match }) => {
     dispatch({ type: 'newParticipant', payload: { name: name } })
   }
 
-  const id = match.params.id
+  const handleOpenNewTimeDialog = () => {
+    setShowNewTimeDialog(true)
+  }
 
+  const handleNewTimeDialogClosed = () => {
+    setShowNewTimeDialog(false)
+  }
+
+  const id = match.params.id
   const { loading, error } = useGetTichel(id, ({ tichel }) =>
     dispatch({ type: 'tichelLoaded', payload: tichel })
   )
   const [addParticipationHook] = useAddParticipation(id)
   const [deleteParticipationHook] = useDeleteParticipation(id)
   const [newParticipantHook] = useNewParticipant(id)
-
   const [tichel, dispatch] = useReducer(reducer, null)
+  const [showNewTimeDialog, setShowNewTimeDialog] = React.useState(false)
 
   if (loading) return 'Loading...'
   if (error) return `Error! ${error.message}`
@@ -110,6 +119,13 @@ const Tichel = ({ match }) => {
             onParticipationChange={handleParticipationChanged}
             onNewParticipant={handleNewParticipant}
           />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleOpenNewTimeDialog}
+          >
+            New Time
+          </Button>
         </div>
       </CardContent>
       <CardActions disableSpacing>
@@ -120,6 +136,10 @@ const Tichel = ({ match }) => {
           <ShareIcon />
         </IconButton>
       </CardActions>
+      <NewTimeDialog
+        open={showNewTimeDialog}
+        onClose={handleNewTimeDialogClosed}
+      />
     </TichelCard>
   )
 }

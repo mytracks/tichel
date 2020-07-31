@@ -18,8 +18,12 @@ const TichelCanvas = ({ tichel, onParticipationChange, onNewParticipant }) => {
     onParticipationChange(participant, time)
   }
 
+  if (tichel.times.length == 0) {
+    return <div>Add times frist</div>
+  }
+
   return (
-    <TichelCanvasStyle count={tichel.times.length + 1}>
+    <TichelCanvasStyle count={tichel.times.length}>
       <TichelHeader tichel={tichel} />
       <ParticipantRows
         participants={tichel.participants}
