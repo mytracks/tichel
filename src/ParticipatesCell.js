@@ -1,11 +1,10 @@
-import React from 'react';
+import React from 'react'
 
-const ParticipatesCell = ({type, clickHandler = () => {}}) => {
-
+const ParticipatesCell = ({ type, clickHandler = () => {} }) => {
   const styles = () => {
     if (type === 1) {
       return {
-        backgroundColor: "green"
+        backgroundColor: 'green',
       }
     }
 
@@ -13,7 +12,7 @@ const ParticipatesCell = ({type, clickHandler = () => {}}) => {
   }
 
   const onClick = () => {
-    console.log("Click!!!")
+    console.log('Click!!!')
     clickHandler()
   }
 
@@ -21,7 +20,7 @@ const ParticipatesCell = ({type, clickHandler = () => {}}) => {
     <div className="ParticipatesCell" onClick={onClick}>
       <div className="ParticipatesCell__Selection" style={styles()} />
     </div>
-  );
+  )
 }
 
 export default ParticipatesCell

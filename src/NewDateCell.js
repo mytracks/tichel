@@ -6,7 +6,8 @@ const StyledDiv = styled.div`
   border-radius: 8px;
   margin: 4px;
   padding: 8px;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
+    'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   text-align: center;
   font-size: 2rem;
   vertical-align: middle;

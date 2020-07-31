@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
+import Button from '@material-ui/core/Button'
+import React, { useState } from 'react'
+import { Redirect } from 'react-router-dom'
 import useNewTichel from './TichelClient/useNewTichel'
 
 const NewTichel = (props) => {
@@ -12,34 +12,34 @@ const NewTichel = (props) => {
   }
 
   const handleNewTichel = (event) => {
-    newTichel({ variables: { title: title } });
-    event.preventDefault();
+    newTichel({ variables: { title: title } })
+    event.preventDefault()
   }
 
-  const tichelCreated = ({id}) => {
+  const tichelCreated = ({ id }) => {
     setId(id)
   }
 
-  const [ newTichel ] = useNewTichel(tichelCreated);
+  const [newTichel] = useNewTichel(tichelCreated)
 
   if (id) {
-    return <Redirect to={"/tichel/"+id} />
+    return <Redirect to={'/tichel/' + id} />
   }
 
   return (
-        <div>
+    <div>
       <form onSubmit={handleNewTichel}>
-      <label>
-        Title:
-        <input type="text" value={title} onChange={handleTitleChanged} />
-      </label>
-      <input type="submit" value="Create" />
-    </form>
-    <Button variant="contained" color="primary">
-      Hello World
-    </Button> 
+        <label>
+          Title:
+          <input type="text" value={title} onChange={handleTitleChanged} />
+        </label>
+        <input type="submit" value="Create" />
+      </form>
+      <Button variant="contained" color="primary">
+        Hello World
+      </Button>
     </div>
-  );
+  )
 }
 
 export default NewTichel

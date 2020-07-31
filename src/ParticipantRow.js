@@ -1,10 +1,13 @@
-import React from 'react';
-import ParticipantCell from './ParticipantCell';
-import ParticipatesCell from './ParticipatesCell';
-import EmptyCell from './EmptyCell';
+import React from 'react'
+import EmptyCell from './EmptyCell'
+import ParticipantCell from './ParticipantCell'
+import ParticipatesCell from './ParticipatesCell'
 
-const ParticipantRow = ({participant, times, onParticipationChange = (participant, time) => {}}) => {
-
+const ParticipantRow = ({
+  participant,
+  times,
+  onParticipationChange = (participant, time) => {},
+}) => {
   const getParticipationType = (time) => {
     for (let participation of time.participations) {
       if (participation.participant.id === participant.id) {
@@ -22,8 +25,14 @@ const ParticipantRow = ({participant, times, onParticipationChange = (participan
 
   return (
     <React.Fragment>
-      <ParticipantCell key={participant.id} participant={participant}/>
-      { times.map( time => <ParticipatesCell key={participant.id + time.id} type={getParticipationType(time)} clickHandler={() => participationClicked(time) } />)}
+      <ParticipantCell key={participant.id} participant={participant} />
+      {times.map((time) => (
+        <ParticipatesCell
+          key={participant.id + time.id}
+          type={getParticipationType(time)}
+          clickHandler={() => participationClicked(time)}
+        />
+      ))}
       <EmptyCell key="NewDateColumn" />
     </React.Fragment>
   )

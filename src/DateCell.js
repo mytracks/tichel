@@ -12,18 +12,10 @@ const shortMonths = [
   'Sep',
   'Oct',
   'Nov',
-  'Dec'
+  'Dec',
 ]
 
-const dayOfWeek = [
-  'Sun',
-  'Mon',
-  'Tue',
-  'Wed',
-  'Thu',
-  'Fri',
-  'Sam'
-]
+const dayOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sam']
 
 const getShortMonth = (date) => shortMonths[date.getMonth(date)]
 const getDayMonth = (date) => date.getDay(date)
@@ -49,11 +41,11 @@ const DateCell = (props) => {
 
   return (
     <div className="DateCell">
-      <div className="DateCell__Month">{ getShortMonth(startDate) }</div>
-      <div className="DateCell__Day">{ getDayMonth(startDate) }</div>
-      <div className="DateCell__DayOfWeek">{ getDayOfWeek(startDate) }</div>
-      <div>{ getTime(startDate) }</div>
-      <div>{ getTime(endDate) }</div>
+      <div className="DateCell__Month">{getShortMonth(startDate)}</div>
+      <div className="DateCell__Day">{getDayMonth(startDate)}</div>
+      <div className="DateCell__DayOfWeek">{getDayOfWeek(startDate)}</div>
+      <div>{getTime(startDate)}</div>
+      <div>{getTime(endDate)}</div>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { gql, useMutation } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client'
 
 const MUTATION = gql`
   mutation DeleteParticipation($id: uuid!) {
@@ -6,17 +6,16 @@ const MUTATION = gql`
       id
     }
   }
-`;
+`
 
 //  [ deleteParticipation, { deleteParticipationData } ]
 const useDeleteParticipation = (tichelId) =>
   useMutation(MUTATION, {
-      context: { 
-          headers: { 
-              "X-Hasura-Tichel-Id": tichelId
-          }
-      }
+    context: {
+      headers: {
+        'X-Hasura-Tichel-Id': tichelId,
+      },
+    },
   })
-
 
 export default useDeleteParticipation

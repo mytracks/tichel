@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const NewParticipant = ({onEnter}) => {
+const NewParticipant = ({ onEnter }) => {
   const DivStyle = styled.div`
     box-sizing: border-box;
     border: solid lightgrey 2px;
@@ -12,8 +12,9 @@ const NewParticipant = ({onEnter}) => {
 
   const InputStyle = styled.input`
     border: none;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    text-align: center;  
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
+      'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    text-align: center;
   `
 
   const handleKeyDown = (event) => {
@@ -25,7 +26,7 @@ const NewParticipant = ({onEnter}) => {
     }
   }
 
-    return (
+  return (
     <DivStyle key="NewParticpant">
       <InputStyle onKeyDown={handleKeyDown}></InputStyle>
     </DivStyle>
