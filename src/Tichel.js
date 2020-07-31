@@ -7,105 +7,78 @@ import IconButton from '@material-ui/core/IconButton'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import ShareIcon from '@material-ui/icons/Share'
-import React, { useState } from 'react'
+import React, { useReducer } from 'react'
 import styled from 'styled-components'
-import { v4 as uuid } from 'uuid'
 import TichelCanvas from './TichelCanvas'
 import useAddParticipation from './TichelClient/useAddParticipation'
 import useDeleteParticipation from './TichelClient/useDeleteParticipation'
 import useGetTichel from './TichelClient/useGetTichel'
 import useNewParticipant from './TichelClient/useNewParticipant'
+import changeParticipation from './TichelLogic/changeParticipation'
+import newParticipant from './TichelLogic/newParticipant'
 
 const TichelCard = styled(Card)`
   width: 345;
   margin: 20px;
 `
 const Tichel = ({ match }) => {
-  const changeParticipation = (participant, time) => {
-    setTichel((currentTichel) => {
-      let times = []
-
-      for (const t of currentTichel.times) {
-        if (t !== time) {
-          times.push(t)
-        } else {
-          let participations = []
-          let didParticipate = false
-          for (const participation of time.participations) {
-            if (participation.participant.id !== participant.id) {
-              participations.push(participation)
-            } else {
-              // participant already takes part
-              didParticipate = true
-              deleteParticipation({ variables: { id: participation.id } })
-            }
-          }
-
-          if (!didParticipate) {
-            let newParticipation = {
-              type: 1,
-              id: uuid(),
-              participant: {
-                id: participant.id,
-              },
-            }
-
-            participations.push(newParticipation)
-
-            addParticipation({
-              variables: { participantId: participant.id, timesId: time.id },
-            })
-          }
-
-          let newTime = { ...t }
-          newTime.participations = participations
-
-          times.push(newTime)
+  const reducer = (currentTichel, action) => {
+    switch (action.type) {
+      case 'tichelLoaded':
+        return action.payload
+      case 'changeParticipation':
+        const participant = action.payload.participant
+        const time = action.payload.time
+        const newTimes = changeParticipation(
+          currentTichel.times,
+          participant,
+          time,
+          addParticipationHook,
+          deleteParticipationHook
+        )
+        return {
+          ...currentTichel,
+          times: newTimes,
         }
-      }
-
-      return {
-        ...currentTichel,
-        times: times,
-      }
-    })
+      case 'newParticipant':
+        const name = action.payload.name
+        const participantId = newParticipant(tichel, name, newParticipantHook)
+        return {
+          ...currentTichel,
+          participants: [
+            ...currentTichel.participants,
+            {
+              name: name,
+              id: participantId,
+            },
+          ],
+        }
+      default:
+        throw new Error()
+    }
   }
 
-  const participationChanged = (participant, time) => {
-    changeParticipation(participant, time)
+  const handleParticipationChanged = (participant, time) => {
+    dispatch({
+      type: 'changeParticipation',
+      payload: { participant: participant, time: time },
+    })
   }
 
   const handleNewParticipant = (name) => {
-    setTichel((currentTichel) => {
-      const participantId = uuid()
-      newParticipant({
-        variables: {
-          participantId: participantId,
-          name: name,
-          tichelId: currentTichel.id,
-        },
-      })
-
-      return {
-        ...currentTichel,
-        participants: [
-          ...currentTichel.participants,
-          {
-            name: name,
-            id: participantId,
-          },
-        ],
-      }
-    })
+    dispatch({ type: 'newParticipant', payload: { name: name } })
   }
 
-  const [tichel, setTichel] = useState()
   const id = match.params.id
 
-  const { loading, error } = useGetTichel(id, ({ tichel }) => setTichel(tichel))
-  const [addParticipation] = useAddParticipation(id)
-  const [deleteParticipation] = useDeleteParticipation(id)
-  const [newParticipant] = useNewParticipant(id)
+  const { loading, error } = useGetTichel(id, ({ tichel }) =>
+    dispatch({ type: 'tichelLoaded', payload: tichel })
+  )
+  const [addParticipationHook] = useAddParticipation(id)
+  const [deleteParticipationHook] = useDeleteParticipation(id)
+  const [newParticipantHook] = useNewParticipant(id)
+
+  const [tichel, dispatch] = useReducer(reducer, null)
 
   if (loading) return 'Loading...'
   if (error) return `Error! ${error.message}`
@@ -134,7 +107,7 @@ const Tichel = ({ match }) => {
         <div className="Tichel">
           <TichelCanvas
             tichel={tichel}
-            onParticipationChange={participationChanged}
+            onParticipationChange={handleParticipationChanged}
             onNewParticipant={handleNewParticipant}
           />
         </div>
