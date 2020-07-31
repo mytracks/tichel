@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField'
 import React, { useState } from 'react'
 
 const NewTimeDialog = ({ open, onClose }) => {
-  const { day, setDay } = useState('2020-07-31')
+  const [day, setDay] = useState('2020-07-31')
 
   const handleOnClose = (event) => {
     onClose()
@@ -17,6 +17,7 @@ const NewTimeDialog = ({ open, onClose }) => {
   const handleDateChange = (event) => {
     const date = event.target.value
     setDay(date)
+    console.log(typeof date)
     console.log(JSON.stringify(date))
   }
 
@@ -55,7 +56,7 @@ const NewTimeDialog = ({ open, onClose }) => {
           id="time"
           label="Start"
           type="time"
-          defaultValue="07:30"
+          defaultValue={day}
           InputLabelProps={{
             shrink: true,
           }}

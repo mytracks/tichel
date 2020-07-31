@@ -18,7 +18,7 @@ const TichelCanvas = ({ tichel, onParticipationChange, onNewParticipant }) => {
     onParticipationChange(participant, time)
   }
 
-  if (tichel.times.length == 0) {
+  if (tichel.times.length === 0) {
     return <div>Add times frist</div>
   }
 
