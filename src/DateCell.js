@@ -18,7 +18,7 @@ const shortMonths = [
 const dayOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sam']
 
 const getShortMonth = (date) => shortMonths[date.getMonth(date)]
-const getDayMonth = (date) => date.getDay(date)
+const getDayMonth = (date) => date.getDate(date)
 const getDayOfWeek = (date) => dayOfWeek[date.getDay(date)]
 
 const getTime = (date) => {

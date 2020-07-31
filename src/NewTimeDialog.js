@@ -5,36 +5,69 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import TextField from '@material-ui/core/TextField'
+import moment from 'moment'
 import React, { useState } from 'react'
 
-const NewTimeDialog = ({ open, onClose }) => {
-  const [day, setDay] = useState('2020-07-31')
+const NewTimeDialog = ({ open, onCancel, onCreate }) => {
+  const now = new moment()
+  const [startDay, setStartDay] = useState(now.format('YYYY-MM-DD'))
+  const [startTime, setStartTime] = useState(now.format('HH:mm:ss'))
+  const [endDay, setEndDay] = useState(now.format('YYYY-MM-DD'))
+  const [endTime, setEndTime] = useState(now.format('HH:mm:ss'))
+  const [isValid, setIsValid] = useState(true)
 
-  const handleOnClose = (event) => {
-    onClose()
+  const handleCancel = (event) => {
+    onCancel()
   }
 
-  const handleDateChange = (event) => {
-    const date = event.target.value
-    setDay(date)
-    console.log(typeof date)
-    console.log(JSON.stringify(date))
+  const handleCreate = (event) => {
+    onCreate(parse())
   }
 
-  const handleStartChange = (event) => {
-    const start = event.target.value
-    console.log(JSON.stringify(start))
+  const handleStartDayChange = (event) => {
+    setStartDay(event.target.value)
+
+    parse()
   }
 
-  const handleEndChange = (event) => {
-    const end = event.target.value
-    console.log(JSON.stringify(end))
+  const handleStartTimeChange = (event) => {
+    setStartTime(event.target.value)
+
+    parse()
+  }
+
+  const handleEndDayChange = (event) => {
+    setEndDay(event.target.value)
+
+    parse()
+  }
+
+  const handleEndTimeChange = (event) => {
+    setEndTime(event.target.value)
+
+    parse()
+  }
+
+  const parse = () => {
+    const start = moment(`${startDay}T${startTime}`)
+    const end = moment(`${endDay}T${endTime}`)
+
+    console.log(
+      'start: ' + JSON.stringify(start) + '  end: ' + JSON.stringify(end)
+    )
+
+    if (start && end) {
+      setIsValid(true)
+      return { start: start, end: end }
+    }
+
+    return null
   }
 
   return (
     <Dialog
       open={open}
-      onClose={handleOnClose}
+      onClose={handleCancel}
       aria-labelledby="form-dialog-title"
     >
       <DialogTitle id="form-dialog-title">New Time</DialogTitle>
@@ -43,47 +76,63 @@ const NewTimeDialog = ({ open, onClose }) => {
           Please set the values for a new time column.
         </DialogContentText>
         <TextField
-          id="date"
-          label="Day"
+          id="startday"
+          label="Start Day"
           type="date"
-          defaultValue="2020-07-31"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          onChange={handleDateChange}
-        />
-        <TextField
-          id="time"
-          label="Start"
-          type="time"
-          defaultValue={day}
+          defaultValue={startDay}
           InputLabelProps={{
             shrink: true,
           }}
           inputProps={{
             step: 300, // 5 min
           }}
-          onChange={handleStartChange}
+          onChange={handleStartDayChange}
         />
         <TextField
-          id="time"
-          label="End"
+          id="starttime"
+          label="Start Time"
           type="time"
-          defaultValue="07:30"
+          defaultValue={startTime}
           InputLabelProps={{
             shrink: true,
           }}
           inputProps={{
             step: 300, // 5 min
           }}
-          onChange={handleEndChange}
+          onChange={handleStartTimeChange}
+        />
+        <TextField
+          id="endday"
+          label="End Day"
+          type="date"
+          defaultValue={endDay}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          inputProps={{
+            step: 300, // 5 min
+          }}
+          onChange={handleEndDayChange}
+        />
+        <TextField
+          id="endtime"
+          label="End Time"
+          type="time"
+          defaultValue={endTime}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          inputProps={{
+            step: 300, // 5 min
+          }}
+          onChange={handleEndTimeChange}
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
+        <Button onClick={handleCancel} color="primary">
           Cancel
         </Button>
-        <Button onClick={onClose} color="primary">
+        <Button onClick={handleCreate} color="primary" disabled={!isValid}>
           Create
         </Button>
       </DialogActions>

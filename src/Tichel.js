@@ -13,9 +13,11 @@ import styled from 'styled-components'
 import NewTimeDialog from './NewTimeDialog'
 import TichelCanvas from './TichelCanvas'
 import useAddParticipation from './TichelClient/useAddParticipation'
+import useAddTime from './TichelClient/useAddTime'
 import useDeleteParticipation from './TichelClient/useDeleteParticipation'
 import useGetTichel from './TichelClient/useGetTichel'
 import useNewParticipant from './TichelClient/useNewParticipant'
+import addTime from './TichelLogic/addTime'
 import changeParticipation from './TichelLogic/changeParticipation'
 import newParticipant from './TichelLogic/newParticipant'
 
@@ -55,6 +57,17 @@ const Tichel = ({ match }) => {
             },
           ],
         }
+      case 'addTime':
+        const { start, end } = action.payload
+        const timeId = addTime(currentTichel, start, end, addTimeHook)
+
+        return {
+          ...currentTichel,
+          times: [
+            ...currentTichel.times,
+            { start: start, end: end, id: timeId, participations: [] },
+          ],
+        }
       default:
         throw new Error()
     }
@@ -75,8 +88,13 @@ const Tichel = ({ match }) => {
     setShowNewTimeDialog(true)
   }
 
-  const handleNewTimeDialogClosed = () => {
+  const handleNewTimeDialogCancel = () => {
     setShowNewTimeDialog(false)
+  }
+
+  const handleNewTimeDialogCreate = ({ start, end }) => {
+    setShowNewTimeDialog(false)
+    dispatch({ type: 'addTime', payload: { start: start, end: end } })
   }
 
   const id = match.params.id
@@ -86,6 +104,7 @@ const Tichel = ({ match }) => {
   const [addParticipationHook] = useAddParticipation(id)
   const [deleteParticipationHook] = useDeleteParticipation(id)
   const [newParticipantHook] = useNewParticipant(id)
+  const [addTimeHook] = useAddTime(id)
   const [tichel, dispatch] = useReducer(reducer, null)
   const [showNewTimeDialog, setShowNewTimeDialog] = React.useState(false)
 
@@ -138,7 +157,8 @@ const Tichel = ({ match }) => {
       </CardActions>
       <NewTimeDialog
         open={showNewTimeDialog}
-        onClose={handleNewTimeDialogClosed}
+        onCancel={handleNewTimeDialogCancel}
+        onCreate={handleNewTimeDialogCreate}
       />
     </TichelCard>
   )
