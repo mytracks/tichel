@@ -14,10 +14,15 @@
     "@testing-library/user-event": "^7.1.2",
     "date-fns": "^2.15.0",
     "graphql": "^15.3.0",
+    "i18next": "^19.6.3",
+    "i18next-browser-languagedetector": "^5.0.0",
+    "i18next-http-backend": "^1.0.17",
+    "i18next-xhr-backend": "^3.2.2",
     "immutable": "^4.0.0-rc.12",
     "moment": "^2.27.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-i18next": "^11.7.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "styled-components": "^5.1.1",
@@ -27,7 +32,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "builddocker": "docker build -t mytracks/tichel .",
+    "rundocker": "docker run -ti --rm -p 8081:80 mytracks/tichel",
+    "pushdocker": "docker push mytracks/tichel"
   },
   "eslintConfig": {
     "extends": "react-app"

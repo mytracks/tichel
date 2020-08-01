@@ -12,14 +12,11 @@ const TichelCanvasStyle = styled.div`
 
 const TichelCanvas = ({ tichel, onParticipationChange, onNewParticipant }) => {
   const participationChanged = (participant, time) => {
-    console.log(
-      `TichelCanvas: ${participant.name}: Time ${time.start.toString()} clicked`
-    )
     onParticipationChange(participant, time)
   }
 
   if (tichel.times.length === 0) {
-    return <div>Add times frist</div>
+    return null
   }
 
   return (

@@ -4,11 +4,14 @@ import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import CardHeader from '@material-ui/core/CardHeader'
+import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
+import { withStyles } from '@material-ui/core/styles'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import ShareIcon from '@material-ui/icons/Share'
-import React, { useReducer } from 'react'
+import React, { useReducer, useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import NewTimeDialog from './NewTimeDialog'
 import TichelCanvas from './TichelCanvas'
@@ -21,11 +24,23 @@ import addTime from './TichelLogic/addTime'
 import changeParticipation from './TichelLogic/changeParticipation'
 import newParticipant from './TichelLogic/newParticipant'
 
+const styles = (theme) => ({
+  root: {},
+  button: {
+    margin: 'auto',
+  },
+  cardContent: {
+    margin: 'auto',
+  },
+})
+
 const TichelCard = styled(Card)`
   width: 345;
   margin: 20px;
 `
-const Tichel = ({ match }) => {
+const Tichel = withStyles(styles)(({ classes, match }) => {
+  const { t } = useTranslation()
+
   const reducer = (currentTichel, action) => {
     switch (action.type) {
       case 'tichelLoaded':
@@ -106,13 +121,19 @@ const Tichel = ({ match }) => {
   const [newParticipantHook] = useNewParticipant(id)
   const [addTimeHook] = useAddTime(id)
   const [tichel, dispatch] = useReducer(reducer, null)
-  const [showNewTimeDialog, setShowNewTimeDialog] = React.useState(false)
+  const [showNewTimeDialog, setShowNewTimeDialog] = useState(false)
+  const [autoShowNewTimeDialog, setAutoShowNewTimeDialog] = useState(true)
 
   if (loading) return 'Loading...'
   if (error) return `Error! ${error.message}`
 
   if (!tichel) {
     return null
+  }
+
+  if (tichel.times.length === 0 && autoShowNewTimeDialog) {
+    setShowNewTimeDialog(true)
+    setAutoShowNewTimeDialog(false)
   }
 
   return (
@@ -131,21 +152,28 @@ const Tichel = ({ match }) => {
         title={tichel.title}
         // subheader="September 14, 2016"
       />
-      <CardContent>
-        <div className="Tichel">
-          <TichelCanvas
-            tichel={tichel}
-            onParticipationChange={handleParticipationChanged}
-            onNewParticipant={handleNewParticipant}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleOpenNewTimeDialog}
-          >
-            New Time
-          </Button>
-        </div>
+      <CardContent className={classes.cardContent}>
+        <Grid container justify="center">
+          <Grid item xs={12}>
+            {tichel.times.length > 0 && (
+              <TichelCanvas
+                tichel={tichel}
+                onParticipationChange={handleParticipationChanged}
+                onNewParticipant={handleNewParticipant}
+              />
+            )}
+          </Grid>
+          <Grid item xs={12}>
+            <Button
+              className={classes.button}
+              variant="contained"
+              color="primary"
+              onClick={handleOpenNewTimeDialog}
+            >
+              <Trans>Add another option</Trans>
+            </Button>
+          </Grid>
+        </Grid>
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
@@ -162,6 +190,6 @@ const Tichel = ({ match }) => {
       />
     </TichelCard>
   )
-}
+})
 
 export default Tichel
