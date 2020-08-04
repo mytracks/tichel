@@ -14,7 +14,7 @@ import i18n from './i18n'
 import Main from './Main'
 import NewTichel from './NewTichel'
 import * as serviceWorker from './serviceWorker'
-import Tichel from './Tichel'
+import TichelWrapper from './TichelWrapper'
 
 const cache = new InMemoryCache()
 
@@ -36,7 +36,7 @@ const element = (
             <Redirect exact={true} from="/" to="/new/" />
             <Route exact={true} path="/new" component={NewTichel} />
             <Route exact={true} path="/main" component={Main} />
-            <Route path="/tichel/:id" component={Tichel} />
+            <Route path="/tichel/:id" component={TichelWrapper} />
           </Switch>
         </div>
       </Router>

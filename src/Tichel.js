@@ -8,19 +8,15 @@ import IconButton from '@material-ui/core/IconButton'
 import { withStyles } from '@material-ui/core/styles'
 import LinkIcon from '@material-ui/icons/Link'
 import copyToClipboard from 'copy-to-clipboard'
-import React, { useReducer, useState } from 'react'
+import React, { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import ParticipantsTable from './components/ParticipantsTable/ParticipantsTable'
 import NewParticipantDialog from './NewParticipantDialog'
 import NewTimeDialog from './NewTimeDialog'
-import useAddParticipation from './TichelClient/useAddParticipation'
-import useAddTime from './TichelClient/useAddTime'
-import useDeleteParticipation from './TichelClient/useDeleteParticipation'
-import useGetTichel from './TichelClient/useGetTichel'
-import useNewParticipant from './TichelClient/useNewParticipant'
-import addTime from './TichelLogic/addTime'
-import changeParticipation from './TichelLogic/changeParticipation'
-import newParticipant from './TichelLogic/newParticipant'
+import {
+  useDispatchContext,
+  useTichelContext,
+} from './providers/TichelProvider'
 
 const styles = (theme) => ({
   root: {},
@@ -32,59 +28,10 @@ const styles = (theme) => ({
   },
 })
 
-const Tichel = withStyles(styles)(({ classes, match }) => {
+const Tichel = withStyles(styles)(({ classes }) => {
   const { t } = useTranslation()
-
-  const reducer = (currentTichel, action) => {
-    switch (action.type) {
-      case 'tichelLoaded':
-        return action.payload
-      case 'changeParticipation':
-        const participant = action.payload.participant
-        const time = action.payload.time
-        const newTimes = changeParticipation(
-          currentTichel.times,
-          participant,
-          time,
-          addParticipationHook,
-          deleteParticipationHook
-        )
-        return {
-          ...currentTichel,
-          times: newTimes,
-        }
-      case 'newParticipant':
-        const name = action.payload.name
-        const participantId = newParticipant(
-          currentTichel,
-          name,
-          newParticipantHook
-        )
-        return {
-          ...currentTichel,
-          participants: [
-            ...currentTichel.participants,
-            {
-              name: name,
-              id: participantId,
-            },
-          ],
-        }
-      case 'addTime':
-        const { start, end } = action.payload
-        const timeId = addTime(currentTichel, start, end, addTimeHook)
-
-        return {
-          ...currentTichel,
-          times: [
-            ...currentTichel.times,
-            { start: start, end: end, id: timeId, participations: [] },
-          ],
-        }
-      default:
-        throw new Error()
-    }
-  }
+  const dispatch = useDispatchContext()
+  const tichel = useTichelContext()
 
   const handleParticipationChanged = (participant, time) => {
     dispatch({
@@ -124,111 +71,104 @@ const Tichel = withStyles(styles)(({ classes, match }) => {
   }
 
   const handleCopyToClipboard = () => {
-    let getUrl = window.location
-    let baseUrl = getUrl.protocol + '//' + getUrl.host
-    let url = `${baseUrl}/tichel/${tichel.id}`
+    const getUrl = window.location
+    const baseUrl = getUrl.protocol + '//' + getUrl.host
+    const url = `${baseUrl}/tichel/${tichel.id}`
     copyToClipboard(url)
   }
 
-  const id = match.params.id
-  const { loading, error } = useGetTichel(id, ({ tichel }) =>
-    dispatch({ type: 'tichelLoaded', payload: tichel })
-  )
-  const [addParticipationHook] = useAddParticipation(id)
-  const [deleteParticipationHook] = useDeleteParticipation(id)
-  const [newParticipantHook] = useNewParticipant(id)
-  const [addTimeHook] = useAddTime(id)
-  const [tichel, dispatch] = useReducer(reducer, null)
   const [showNewTimeDialog, setShowNewTimeDialog] = useState(false)
   const [autoShowNewTimeDialog, setAutoShowNewTimeDialog] = useState(true)
   const [showNewParticipantDialog, setShowNewParticipantDialog] = useState(
     false
   )
 
-  if (loading) return 'Loading...'
-  if (error) return `Error! ${error.message}`
-
-  if (!tichel) {
-    return null
-  }
-
-  if (tichel.times.length === 0 && autoShowNewTimeDialog) {
+  if (tichel?.times.length === 0 && autoShowNewTimeDialog) {
     setShowNewTimeDialog(true)
     setAutoShowNewTimeDialog(false)
   }
 
+  console.log(
+    'tichel called: ' +
+      JSON.stringify(tichel) +
+      '    ' +
+      JSON.stringify(dispatch)
+  )
+
+  if (tichel === undefined) {
+    return null
+  }
+
   return (
-    <div>
-      <Card raised>
-        <CardHeader
-          // avatar={
-          //   <Avatar aria-label="recipe">
-          //     {tichel.title.toUpperCase().slice(0, 1)}
-          //   </Avatar>
-          // }
-          // action={
-          //   <IconButton aria-label="settings">
-          //     <MoreVertIcon />
-          //   </IconButton>
-          // }
-          title={tichel.title}
-          // subheader="September 14, 2016"
-        />
-        <CardContent className={classes.cardContent}>
-          <Grid container justify="center">
-            <Grid item xs={12}>
-              {tichel.times.length > 0 && (
-                <ParticipantsTable
-                  tichel={tichel}
-                  onParticipationChange={handleParticipationChanged}
-                />
-                // <TichelCanvas
-                //   tichel={tichel}
-                //   onParticipationChange={handleParticipationChanged}
-                //   onNewParticipant={handleNewParticipant}
-                // />
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              <Button
-                className={classes.button}
-                variant="contained"
-                color="primary"
-                onClick={handleOpenNewTimeDialog}
-              >
-                <Trans>Add another option</Trans>
-              </Button>
-              <Button
-                className={classes.button}
-                variant="contained"
-                color="primary"
-                onClick={handleOpenNewParticipantDialog}
-              >
-                <Trans>Add yourself</Trans>
-              </Button>
-            </Grid>
+    <Card raised>
+      <CardHeader
+        // avatar={
+        //   <Avatar aria-label="recipe">
+        //     {tichel.title.toUpperCase().slice(0, 1)}
+        //   </Avatar>
+        // }
+        // action={
+        //   <IconButton aria-label="settings">
+        //     <MoreVertIcon />
+        //   </IconButton>
+        // }
+        title={tichel.title}
+        // subheader="September 14, 2016"
+      />
+      <CardContent className={classes.cardContent}>
+        <Grid container justify="center">
+          <Grid item xs={12}>
+            {tichel.times.length > 0 && (
+              <ParticipantsTable
+                tichel={tichel}
+                onParticipationChange={handleParticipationChanged}
+              />
+              // <TichelCanvas
+              //   tichel={tichel}
+              //   onParticipationChange={handleParticipationChanged}
+              //   onNewParticipant={handleNewParticipant}
+              // />
+            )}
           </Grid>
-        </CardContent>
-        <CardActions disableSpacing>
-          <IconButton
-            aria-label="Copy Tichel's link to clipboard"
-            onClick={handleCopyToClipboard}
-          >
-            <LinkIcon />
-          </IconButton>
-        </CardActions>
-        <NewTimeDialog
-          open={showNewTimeDialog}
-          onCancel={handleNewTimeDialogCancel}
-          onCreate={handleNewTimeDialogCreate}
-        />
-        <NewParticipantDialog
-          open={showNewParticipantDialog}
-          onCancel={handleNewParticipantDialogCancel}
-          onCreate={handleNewParticipantDialogCreate}
-        />
-      </Card>
-    </div>
+          <Grid item xs={12}>
+            <Button
+              className={classes.button}
+              variant="contained"
+              color="primary"
+              onClick={handleOpenNewTimeDialog}
+            >
+              <Trans>Add another option</Trans>
+            </Button>
+            <Button
+              className={classes.button}
+              variant="contained"
+              color="primary"
+              onClick={handleOpenNewParticipantDialog}
+            >
+              <Trans>Add yourself</Trans>
+            </Button>
+          </Grid>
+        </Grid>
+      </CardContent>
+      <CardActions disableSpacing>
+        <IconButton
+          aria-label="Copy Tichel's link to clipboard"
+          onClick={handleCopyToClipboard}
+        >
+          <LinkIcon />
+        </IconButton>
+      </CardActions>
+      <NewTimeDialog
+        open={showNewTimeDialog}
+        onCancel={handleNewTimeDialogCancel}
+        onCreate={handleNewTimeDialogCreate}
+      />
+      <NewParticipantDialog
+        open={showNewParticipantDialog}
+        onCancel={handleNewParticipantDialogCancel}
+        onCreate={handleNewParticipantDialogCreate}
+      />
+    </Card>
   )
 })
 
