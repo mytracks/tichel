@@ -47,4 +47,32 @@ const getYYYYMMDD = (date) => {
   return `${years}-${months}-${days}`
 }
 
-export { getHHMM, getHHMMSS, getYYYYMMDD }
+const shortMonths = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+]
+
+const dayOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sam']
+
+const getShortMonth = (date) => shortMonths[date.getMonth()]
+const getDayMonth = (date) => date.getDate()
+const getDayOfWeek = (date) => dayOfWeek[date.getDay()]
+
+export {
+  getHHMM,
+  getHHMMSS,
+  getYYYYMMDD,
+  getShortMonth,
+  getDayMonth,
+  getDayOfWeek,
+}

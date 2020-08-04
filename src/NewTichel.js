@@ -29,6 +29,12 @@ const styles = (theme) => ({
     fullWidth: true,
     margin: theme.spacing(1),
   },
+  footer: {
+    padding: '20px',
+    position: 'sticky',
+    top: '30px',
+    left: '30px',
+  },
 })
 
 const NewTichel = withStyles(styles)(({ classes }) => {
@@ -126,6 +132,9 @@ const NewTichel = withStyles(styles)(({ classes }) => {
           </div>
         </form>
       </Paper>
+      <Typography className={classes.footer}>
+        Made with ❤ in Paderborn, Germany.
+      </Typography>
     </div>
   )
 })

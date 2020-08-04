@@ -10,7 +10,7 @@ import {
   Switch,
 } from 'react-router-dom'
 import i18n from './i18n'
-import './index.css'
+// import './index.css'
 import Main from './Main'
 import NewTichel from './NewTichel'
 import * as serviceWorker from './serviceWorker'
