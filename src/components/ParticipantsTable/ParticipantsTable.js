@@ -12,29 +12,22 @@ const styles = (theme) => ({
   },
 })
 
-const ParticipantsTable = withStyles(styles)(
-  ({ classes, tichel, onParticipationChange }) => {
-    const handleParticipationChange = (participant, time) => {
-      onParticipationChange(participant, time)
-    }
-
-    if (tichel.times.length === 0) {
-      return null
-    }
-
-    return (
-      <div>
-        {tichel.participants.map((participant) => (
-          <Participant
-            key={participant.id}
-            participant={participant}
-            times={tichel.times}
-            onParticipationChange={handleParticipationChange}
-          ></Participant>
-        ))}
-      </div>
-    )
+const ParticipantsTable = withStyles(styles)(({ classes, tichel }) => {
+  if (tichel.times.length === 0) {
+    return null
   }
-)
+
+  return (
+    <div>
+      {tichel.participants.map((participant) => (
+        <Participant
+          key={participant.id}
+          participant={participant}
+          times={tichel.times}
+        />
+      ))}
+    </div>
+  )
+})
 
 export default ParticipantsTable

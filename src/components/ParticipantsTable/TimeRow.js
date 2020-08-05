@@ -2,6 +2,10 @@ import { Box, Checkbox, Container, Typography } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import React from 'react'
 import {
+  getParticipationType,
+  useDispatchContext,
+} from '../../providers/TichelProvider'
+import {
   getDayMonth,
   getDayOfWeek,
   getHHMM,
@@ -38,44 +42,48 @@ const styles = (theme) => ({
   },
 })
 
-const TimeRow = withStyles(styles)(
-  ({ classes, time, participationType, onParticipationChange }) => {
-    const handleParticipationChange = () => {
-      onParticipationChange()
-    }
+const TimeRow = withStyles(styles)(({ classes, participant, time }) => {
+  const dispatch = useDispatchContext()
 
-    const start = new Date(time.start)
-    const end = new Date(time.end)
-
-    return (
-      <Box className={classes.root} display="flex">
-        <Container className={classes.dateContainer}>
-          <Typography className={classes.month} align="center">
-            {getShortMonth(start)}
-          </Typography>
-          <Typography className={classes.day} align="center">
-            {getDayMonth(start)}
-          </Typography>
-          <Typography className={classes.dayOfWeek} align="center">
-            {getDayOfWeek(start)}
-          </Typography>
-        </Container>
-        <Container>
-          <Typography>
-            {getHHMM(start)} - {getHHMM(end)}
-          </Typography>
-        </Container>
-        <Container className={classes.checkboxContainer}>
-          <Checkbox
-            className={classes.greenCheckbox}
-            checked={participationType !== 0}
-            onClick={handleParticipationChange}
-            color="primary"
-          ></Checkbox>
-        </Container>
-      </Box>
-    )
+  const handleParticipationChange = () => {
+    dispatch({
+      type: 'changeParticipation',
+      payload: { participant: participant, time: time },
+    })
   }
-)
+
+  const start = new Date(time.start)
+  const end = new Date(time.end)
+  const participationType = getParticipationType(participant, time)
+
+  return (
+    <Box className={classes.root} display="flex">
+      <Container className={classes.dateContainer}>
+        <Typography className={classes.month} align="center">
+          {getShortMonth(start)}
+        </Typography>
+        <Typography className={classes.day} align="center">
+          {getDayMonth(start)}
+        </Typography>
+        <Typography className={classes.dayOfWeek} align="center">
+          {getDayOfWeek(start)}
+        </Typography>
+      </Container>
+      <Container>
+        <Typography>
+          {getHHMM(start)} - {getHHMM(end)}
+        </Typography>
+      </Container>
+      <Container className={classes.checkboxContainer}>
+        <Checkbox
+          className={classes.greenCheckbox}
+          checked={participationType !== 0}
+          onClick={handleParticipationChange}
+          color="primary"
+        ></Checkbox>
+      </Container>
+    </Box>
+  )
+})
 
 export default TimeRow

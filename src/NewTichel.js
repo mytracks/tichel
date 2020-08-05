@@ -132,9 +132,6 @@ const NewTichel = withStyles(styles)(({ classes }) => {
           </div>
         </form>
       </Paper>
-      <Typography className={classes.footer}>
-        Made with ❤ in Paderborn, Germany.
-      </Typography>
     </div>
   )
 })

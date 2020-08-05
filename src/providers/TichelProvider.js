@@ -10,11 +10,33 @@ const TichelContext = createContext()
 const DispatchContext = createContext()
 
 const useTichelContext = () => {
-  useContext(TichelContext)
+  const contextValue = useContext(TichelContext)
+
+  if (contextValue === undefined) {
+    throw new Error('useTichelContext must be used within <TichelProvider />')
+  }
+
+  return contextValue
 }
 
 const useDispatchContext = () => {
-  useContext(DispatchContext)
+  const contextValue = useContext(DispatchContext)
+
+  if (contextValue === undefined) {
+    throw new Error('useDispatchContext must be used within <TichelProvider />')
+  }
+
+  return contextValue
+}
+
+const getParticipationType = (participant, time) => {
+  for (let participation of time.participations) {
+    if (participation.participant.id === participant.id) {
+      return participation.type
+    }
+  }
+
+  return 0
 }
 
 const TichelProvider = ({ id, children }) => {
@@ -93,7 +115,6 @@ const TichelProvider = ({ id, children }) => {
   const reducer = (currentTichel, action) => {
     switch (action.type) {
       case 'tichelLoaded':
-        console.log('reducer: tichelLoaded:' + JSON.stringify(action.payload))
         return action.payload
       case 'changeParticipation':
         const participant = action.payload.participant
@@ -141,12 +162,9 @@ const TichelProvider = ({ id, children }) => {
   const [newParticipantMutation] = useNewParticipant(id)
   const [addTimeMutation] = useAddTime(id)
   const [tichel, dispatch] = useReducer(reducer, null)
-  const { loading, error } = useGetTichel(id, ({ tichel }) => {
-    console.log('tichelLoaded')
+  /*const { loading, error } =*/ useGetTichel(id, ({ tichel }) => {
     dispatch({ type: 'tichelLoaded', payload: tichel })
   })
-
-  console.log('TichelProvider: ' + JSON.stringify(dispatch))
 
   return (
     <TichelContext.Provider value={tichel}>
@@ -157,4 +175,9 @@ const TichelProvider = ({ id, children }) => {
   )
 }
 
-export { TichelProvider, useTichelContext, useDispatchContext }
+export {
+  TichelProvider,
+  useTichelContext,
+  useDispatchContext,
+  getParticipationType,
+}

@@ -2,10 +2,8 @@ import React from 'react'
 import { TichelProvider } from './providers/TichelProvider'
 import Tichel from './Tichel'
 
-const TichelWrapper = ({ match }) => {
+const TichelPage = ({ match }) => {
   const id = match.params.id
-
-  console.log('TichelWrapper')
 
   return (
     <TichelProvider id={id}>
@@ -14,4 +12,4 @@ const TichelWrapper = ({ match }) => {
   )
 }
 
-export default TichelWrapper
+export default TichelPage

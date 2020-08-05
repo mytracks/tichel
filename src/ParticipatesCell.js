@@ -12,7 +12,6 @@ const ParticipatesCell = ({ type, clickHandler = () => {} }) => {
   }
 
   const onClick = () => {
-    console.log('Click!!!')
     clickHandler()
   }
 

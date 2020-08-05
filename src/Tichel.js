@@ -9,7 +9,7 @@ import { withStyles } from '@material-ui/core/styles'
 import LinkIcon from '@material-ui/icons/Link'
 import copyToClipboard from 'copy-to-clipboard'
 import React, { useState } from 'react'
-import { Trans, useTranslation } from 'react-i18next'
+import { Trans } from 'react-i18next'
 import ParticipantsTable from './components/ParticipantsTable/ParticipantsTable'
 import NewParticipantDialog from './NewParticipantDialog'
 import NewTimeDialog from './NewTimeDialog'
@@ -29,20 +29,8 @@ const styles = (theme) => ({
 })
 
 const Tichel = withStyles(styles)(({ classes }) => {
-  const { t } = useTranslation()
   const dispatch = useDispatchContext()
   const tichel = useTichelContext()
-
-  const handleParticipationChanged = (participant, time) => {
-    dispatch({
-      type: 'changeParticipation',
-      payload: { participant: participant, time: time },
-    })
-  }
-
-  const handleNewParticipant = (name) => {
-    dispatch({ type: 'newParticipant', payload: { name: name } })
-  }
 
   const handleOpenNewTimeDialog = () => {
     setShowNewTimeDialog(true)
@@ -61,13 +49,8 @@ const Tichel = withStyles(styles)(({ classes }) => {
     setShowNewParticipantDialog(true)
   }
 
-  const handleNewParticipantDialogCancel = () => {
+  const handleNewParticipantDialogClose = () => {
     setShowNewParticipantDialog(false)
-  }
-
-  const handleNewParticipantDialogCreate = (name) => {
-    setShowNewParticipantDialog(false)
-    dispatch({ type: 'newParticipant', payload: { name: name } })
   }
 
   const handleCopyToClipboard = () => {
@@ -88,14 +71,7 @@ const Tichel = withStyles(styles)(({ classes }) => {
     setAutoShowNewTimeDialog(false)
   }
 
-  console.log(
-    'tichel called: ' +
-      JSON.stringify(tichel) +
-      '    ' +
-      JSON.stringify(dispatch)
-  )
-
-  if (tichel === undefined) {
+  if (!tichel) {
     return null
   }
 
@@ -118,17 +94,7 @@ const Tichel = withStyles(styles)(({ classes }) => {
       <CardContent className={classes.cardContent}>
         <Grid container justify="center">
           <Grid item xs={12}>
-            {tichel.times.length > 0 && (
-              <ParticipantsTable
-                tichel={tichel}
-                onParticipationChange={handleParticipationChanged}
-              />
-              // <TichelCanvas
-              //   tichel={tichel}
-              //   onParticipationChange={handleParticipationChanged}
-              //   onNewParticipant={handleNewParticipant}
-              // />
-            )}
+            {tichel.times.length > 0 && <ParticipantsTable tichel={tichel} />}
           </Grid>
           <Grid item xs={12}>
             <Button
@@ -165,8 +131,7 @@ const Tichel = withStyles(styles)(({ classes }) => {
       />
       <NewParticipantDialog
         open={showNewParticipantDialog}
-        onCancel={handleNewParticipantDialogCancel}
-        onCreate={handleNewParticipantDialogCreate}
+        onClose={handleNewParticipantDialogClose}
       />
     </Card>
   )

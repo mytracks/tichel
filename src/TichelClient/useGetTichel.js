@@ -27,7 +27,6 @@ const QUERY = gql`
 
 // { loading, error, data }
 const useGetTichel = (tichelId, onCompleted) => {
-  console.log('useTichelQuery')
   return useQuery(QUERY, {
     context: {
       headers: {

@@ -12,51 +12,30 @@ const styles = (theme) => ({
   },
 })
 
-const Participant = withStyles(styles)(
-  ({ classes, times, participant, onParticipationChange }) => {
-    const handleParticipationChange = (time) => {
-      onParticipationChange(participant, time)
-    }
-
-    const getParticipationType = (time) => {
-      for (let participation of time.participations) {
-        if (participation.participant.id === participant.id) {
-          return participation.type
+const Participant = withStyles(styles)(({ classes, times, participant }) => {
+  return (
+    <Card className={classes.card}>
+      <CardHeader
+        avatar={
+          <Avatar aria-label="recipe">
+            {participant.name.toUpperCase().slice(0, 1)}
+          </Avatar>
         }
-      }
-
-      return 0
-    }
-
-    return (
-      <Card className={classes.card}>
-        <CardHeader
-          avatar={
-            <Avatar aria-label="recipe">
-              {participant.name.toUpperCase().slice(0, 1)}
-            </Avatar>
-          }
-          // action={
-          //   <IconButton aria-label="settings">
-          //     <MoreVertIcon />
-          //   </IconButton>
-          // }
-          title={participant.name}
-          // subheader="September 14, 2016"
-        />
-        <CardContent className={classes.cardContent}>
-          {times.map((time) => (
-            <TimeRow
-              key={time.id}
-              participationType={getParticipationType(time)}
-              time={time}
-              onParticipationChange={() => handleParticipationChange(time)}
-            />
-          ))}
-        </CardContent>
-      </Card>
-    )
-  }
-)
+        // action={
+        //   <IconButton aria-label="settings">
+        //     <MoreVertIcon />
+        //   </IconButton>
+        // }
+        title={participant.name}
+        // subheader="September 14, 2016"
+      />
+      <CardContent className={classes.cardContent}>
+        {times.map((time) => (
+          <TimeRow key={time.id} participant={participant} time={time} />
+        ))}
+      </CardContent>
+    </Card>
+  )
+})
 
 export default Participant

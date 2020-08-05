@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import React, { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
+import { useDispatchContext } from './providers/TichelProvider'
 
 const styles = (theme) => ({
   textField: {
@@ -16,17 +17,20 @@ const styles = (theme) => ({
 })
 
 const NewParticipantDialog = withStyles(styles)(
-  ({ open, onCancel, onCreate, classes }) => {
+  ({ open, classes, onClose }) => {
     const { t } = useTranslation()
+    const dispatch = useDispatchContext()
+
     const [name, setName] = useState('')
     const [isValid, setIsValid] = useState(true)
 
-    const handleCancel = (event) => {
-      onCancel()
+    const handleCancel = () => {
+      onClose()
     }
 
-    const handleCreate = (event) => {
-      onCreate(name)
+    const handleCreate = () => {
+      dispatch({ type: 'newParticipant', payload: { name: name } })
+      onClose()
     }
 
     const handleNameChange = (event) => {
