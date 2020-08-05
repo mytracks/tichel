@@ -14,7 +14,7 @@ const styles = (theme) => ({
 
 const Participant = withStyles(styles)(({ classes, times, participant }) => {
   return (
-    <Card className={classes.card}>
+    <Card className={classes.card} raised>
       <CardHeader
         avatar={
           <Avatar aria-label="recipe">

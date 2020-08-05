@@ -84,7 +84,7 @@ const NewTichel = withStyles(styles)(({ classes }) => {
 
   return (
     <div className={classes.outerDiv}>
-      <Paper className={classes.paper}>
+      <Paper className={classes.paper} variant="elevation" elevation={8}>
         <div>
           <Typography variant="h5" gutterBottom>
             <Trans>Welcome to Tichel</Trans>
