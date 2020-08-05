@@ -56,6 +56,9 @@ const TimeRow = withStyles(styles)(({ classes, participant, time }) => {
   const end = new Date(time.end)
   const participationType = getParticipationType(participant, time)
 
+  console.log(`time.start ${time.start} ${typeof time.start}`)
+  console.log(`Start Date ${start} ${typeof start}`)
+
   return (
     <Box className={classes.root} display="flex">
       <Container className={classes.dateContainer}>

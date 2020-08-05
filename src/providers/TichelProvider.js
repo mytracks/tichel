@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useReducer } from 'react'
 import { v4 as uuid } from 'uuid'
 import useAddParticipation from '../TichelClient/useAddParticipation'
-import useAddTime from '../TichelClient/useAddTime'
 import useDeleteParticipation from '../TichelClient/useDeleteParticipation'
 import useGetTichel from '../TichelClient/useGetTichel'
 import useNewParticipant from '../TichelClient/useNewParticipant'
@@ -40,20 +39,6 @@ const getParticipationType = (participant, time) => {
 }
 
 const TichelProvider = ({ id, children }) => {
-  const addTime = (tichel, start, end) => {
-    const timeId = uuid()
-    addTimeMutation({
-      variables: {
-        id: timeId,
-        start: start,
-        end: end,
-        tichelId: tichel.id,
-      },
-    })
-
-    return timeId
-  }
-
   const changeParticipation = (currentTimes, participant, time) => {
     let times = []
 
@@ -112,10 +97,20 @@ const TichelProvider = ({ id, children }) => {
     return participantId
   }
 
+  const sortTichel = (currentTichel) => {
+    return {
+      ...currentTichel,
+      times: currentTichel.times
+        .slice()
+        .sort((a, b) => (a.start > b.start ? 1 : -1)),
+    }
+  }
+
   const reducer = (currentTichel, action) => {
+    console.log('Reducer: ' + action.type)
     switch (action.type) {
       case 'tichelLoaded':
-        return action.payload
+        return sortTichel(action.payload)
       case 'changeParticipation':
         const participant = action.payload.participant
         const time = action.payload.time
@@ -124,14 +119,14 @@ const TichelProvider = ({ id, children }) => {
           participant,
           time
         )
-        return {
+        return sortTichel({
           ...currentTichel,
           times: newTimes,
-        }
+        })
       case 'newParticipant':
         const name = action.payload.name
         const participantId = newParticipant(currentTichel, name)
-        return {
+        return sortTichel({
           ...currentTichel,
           participants: [
             ...currentTichel.participants,
@@ -140,18 +135,17 @@ const TichelProvider = ({ id, children }) => {
               id: participantId,
             },
           ],
-        }
+        })
       case 'addTime':
-        const { start, end } = action.payload
-        const timeId = addTime(currentTichel, start, end)
+        const { start, end, timeId } = action.payload
 
-        return {
+        return sortTichel({
           ...currentTichel,
           times: [
             ...currentTichel.times,
             { start: start, end: end, id: timeId, participations: [] },
           ],
-        }
+        })
       default:
         throw new Error()
     }
@@ -160,7 +154,6 @@ const TichelProvider = ({ id, children }) => {
   const [addParticipationMutation] = useAddParticipation(id)
   const [deleteParticipationMutation] = useDeleteParticipation(id)
   const [newParticipantMutation] = useNewParticipant(id)
-  const [addTimeMutation] = useAddTime(id)
   const [tichel, dispatch] = useReducer(reducer, null)
   /*const { loading, error } =*/ useGetTichel(id, ({ tichel }) => {
     dispatch({ type: 'tichelLoaded', payload: tichel })

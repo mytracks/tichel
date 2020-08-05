@@ -8,7 +8,12 @@ import TextField from '@material-ui/core/TextField'
 import moment from 'moment'
 import React, { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import { useDispatchContext } from './providers/TichelProvider'
+import { v4 as uuid } from 'uuid'
+import {
+  useDispatchContext,
+  useTichelContext,
+} from './providers/TichelProvider'
+import useAddTime from './TichelClient/useAddTime'
 
 const styles = (theme) => ({
   textField: {
@@ -20,12 +25,14 @@ const styles = (theme) => ({
 const NewTimeDialog = withStyles(styles)(({ open, onClose, classes }) => {
   const { t } = useTranslation()
   const dispatch = useDispatchContext()
+  const tichel = useTichelContext()
   const now = new moment()
   const [startDay, setStartDay] = useState(now.format('YYYY-MM-DD'))
   const [startTime, setStartTime] = useState(now.format('HH:mm:ss'))
   const [endDay, setEndDay] = useState(now.format('YYYY-MM-DD'))
   const [endTime, setEndTime] = useState(now.format('HH:mm:ss'))
   const [isValid, setIsValid] = useState(true)
+  const [addTimeMutation] = useAddTime(tichel.id)
 
   const handleCancel = () => {
     onClose()
@@ -34,8 +41,19 @@ const NewTimeDialog = withStyles(styles)(({ open, onClose, classes }) => {
   const handleCreate = () => {
     const payload = parse()
 
+    console.log('handleCreate')
+
     if (payload) {
-      dispatch({ type: 'addTime', payload: payload })
+      const timeId = uuid()
+      addTimeMutation({
+        variables: {
+          id: timeId,
+          start: payload.start,
+          end: payload.end,
+          tichelId: tichel.id,
+        },
+      })
+      dispatch({ type: 'addTime', payload: { ...payload, timeId: timeId } })
       onClose()
     }
   }
@@ -75,7 +93,7 @@ const NewTimeDialog = withStyles(styles)(({ open, onClose, classes }) => {
 
     if (start && end) {
       setIsValid(true)
-      return { start: start, end: end }
+      return { start: start.toISOString(), end: end.toISOString() }
     }
 
     return null
@@ -88,7 +106,7 @@ const NewTimeDialog = withStyles(styles)(({ open, onClose, classes }) => {
       aria-labelledby="form-dialog-title"
     >
       <DialogTitle id="form-dialog-title">
-        <Trans>New Option</Trans>
+        <Trans>New Time Option</Trans>
       </DialogTitle>
       <DialogContent>
         {/* <DialogContentText></DialogContentText> */}

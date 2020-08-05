@@ -96,7 +96,7 @@ const Tichel = withStyles(styles)(({ classes }) => {
                 color="primary"
                 onClick={handleOpenNewTimeDialog}
               >
-                <Trans>Add another option</Trans>
+                <Trans>Add time option</Trans>
               </Button>
               <Button
                 className={classes.button}
