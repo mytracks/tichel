@@ -15,6 +15,7 @@ import ParticipantsTable from './components/ParticipantsTable/ParticipantsTable'
 import NewParticipantDialog from './NewParticipantDialog'
 import NewTimeDialog from './NewTimeDialog'
 import { useTichelContext } from './providers/TichelProvider'
+import { getCreationId, getSelfId } from './utils/storage'
 
 const styles = (theme) => ({
   root: {},
@@ -67,6 +68,14 @@ const Tichel = withStyles(styles)(({ classes }) => {
     return null
   }
 
+  let selfId = getSelfId(tichel.id)
+  let canAddSelf =
+    selfId === null ||
+    tichel.participants.filter((p) => p.id === selfId).length === 0
+
+  let creationId = getCreationId(tichel.id)
+  let canAddTimes = creationId !== null
+
   return (
     <Container maxWidth="sm">
       <Card raised>
@@ -90,22 +99,26 @@ const Tichel = withStyles(styles)(({ classes }) => {
               {tichel.times.length > 0 && <ParticipantsTable tichel={tichel} />}
             </Grid>
             <Grid item xs={12}>
-              <Button
-                className={classes.button}
-                variant="contained"
-                color="primary"
-                onClick={handleOpenNewTimeDialog}
-              >
-                <Trans>Add time option</Trans>
-              </Button>
-              <Button
-                className={classes.button}
-                variant="contained"
-                color="primary"
-                onClick={handleOpenNewParticipantDialog}
-              >
-                <Trans>Add yourself</Trans>
-              </Button>
+              {canAddTimes && (
+                <Button
+                  className={classes.button}
+                  variant="contained"
+                  color="primary"
+                  onClick={handleOpenNewTimeDialog}
+                >
+                  <Trans>Add time option</Trans>
+                </Button>
+              )}
+              {canAddSelf && (
+                <Button
+                  className={classes.button}
+                  variant="contained"
+                  color="primary"
+                  onClick={handleOpenNewParticipantDialog}
+                >
+                  <Trans>Add yourself</Trans>
+                </Button>
+              )}
             </Grid>
           </Grid>
         </CardContent>

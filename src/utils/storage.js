@@ -26,29 +26,37 @@ const storageAvailable = (storage) => {
   }
 }
 
-const setCreationId = (tichelId, creationId) => {
+const setValue = (tichelId, type, value) => {
   const storage = window['localStorage']
   if (storageAvailable(storage)) {
     try {
-      let key = `${tichelId}_creation_id`
-      storage.setItem(key, creationId)
+      let key = `${tichelId}_${type}`
+      storage.setItem(key, value)
     } catch (e) {}
   }
   console.log('storage not available')
 }
 
-const getCreationId = (tichelId) => {
-  console.log('getCreationId: ' + tichelId)
+const getValue = (tichelId, type) => {
   const storage = window['localStorage']
   if (storageAvailable(storage)) {
     try {
-      let key = `${tichelId}_creation_id`
-      let creation_id = storage.getItem(key)
+      let key = `${tichelId}_${type}`
+      let value = storage.getItem(key)
 
-      return creation_id
+      return value
     } catch (e) {}
   }
   console.log('storage not available')
+
+  return null
 }
 
-export { setCreationId, getCreationId }
+const setCreationId = (tichelId, creationId) =>
+  setValue(tichelId, 'creation_id', creationId)
+const getCreationId = (tichelId) => getValue(tichelId, 'creation_id')
+const setSelfId = (tichelId, creationId) =>
+  setValue(tichelId, 'self_id', creationId)
+const getSelfId = (tichelId) => getValue(tichelId, 'self_id')
+
+export { setCreationId, getCreationId, setSelfId, getSelfId }

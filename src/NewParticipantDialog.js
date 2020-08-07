@@ -7,7 +7,13 @@ import { withStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import React, { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import { useDispatchContext } from './providers/TichelProvider'
+import { v4 as uuid } from 'uuid'
+import {
+  useDispatchContext,
+  useTichelContext,
+} from './providers/TichelProvider'
+import useNewParticipant from './TichelClient/useNewParticipant'
+import { setSelfId } from './utils/storage'
 
 const styles = (theme) => ({
   textField: {
@@ -20,6 +26,8 @@ const NewParticipantDialog = withStyles(styles)(
   ({ open, classes, onClose }) => {
     const { t } = useTranslation()
     const dispatch = useDispatchContext()
+    const tichel = useTichelContext()
+    const [newParticipantMutation] = useNewParticipant(tichel.id)
 
     const [name, setName] = useState('')
     const [isValid, setIsValid] = useState(true)
@@ -29,7 +37,19 @@ const NewParticipantDialog = withStyles(styles)(
     }
 
     const handleCreate = () => {
-      dispatch({ type: 'newParticipant', payload: { name: name } })
+      const participantId = uuid()
+      newParticipantMutation({
+        variables: {
+          participantId: participantId,
+          name: name,
+          tichelId: tichel.id,
+        },
+      })
+      setSelfId(tichel.id, participantId)
+      dispatch({
+        type: 'newParticipant',
+        payload: { name: name, id: participantId },
+      })
       onClose()
     }
 
