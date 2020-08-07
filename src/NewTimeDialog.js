@@ -32,7 +32,7 @@ const NewTimeDialog = withStyles(styles)(({ open, onClose, classes }) => {
   const [endDay, setEndDay] = useState(now.format('YYYY-MM-DD'))
   const [endTime, setEndTime] = useState(now.format('HH:mm:ss'))
   const [isValid, setIsValid] = useState(true)
-  const [addTimeMutation] = useAddTime(tichel.id)
+  const [addTimeMutation] = useAddTime(tichel.id, tichel.creationId)
 
   const handleCancel = () => {
     onClose()

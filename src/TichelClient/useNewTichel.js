@@ -4,6 +4,7 @@ const MUTATION = gql`
   mutation NewTichel(
     $title: String!
     $tichelId: uuid!
+    $creationId: uuid!
     $name: String!
     $email: String!
   ) {
@@ -11,6 +12,7 @@ const MUTATION = gql`
       object: {
         title: $title
         id: $tichelId
+        creation_id: $creationId
         participants: { data: { email: $email, name: $name } }
       }
     ) {

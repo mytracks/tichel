@@ -8,6 +8,7 @@ import { Trans, useTranslation } from 'react-i18next'
 import { Redirect } from 'react-router-dom'
 import { v4 as uuid } from 'uuid'
 import useNewTichel from './TichelClient/useNewTichel'
+import { setCreationId } from './utils/storage'
 
 const styles = (theme) => ({
   root: {
@@ -58,10 +59,15 @@ const NewTichel = withStyles(styles)(({ classes }) => {
   }
 
   const handleNewTichel = (event) => {
+    let creationId = uuid()
+
+    setCreationId(newTichelId, creationId)
+
     newTichel({
       variables: {
         title: title,
         tichelId: newTichelId,
+        creationId: creationId,
         name: name,
         email: email,
       },

@@ -4,6 +4,7 @@ import useAddParticipation from '../TichelClient/useAddParticipation'
 import useDeleteParticipation from '../TichelClient/useDeleteParticipation'
 import useGetTichel from '../TichelClient/useGetTichel'
 import useNewParticipant from '../TichelClient/useNewParticipant'
+import { getCreationId } from '../utils/storage'
 
 const TichelContext = createContext()
 const DispatchContext = createContext()
@@ -98,8 +99,11 @@ const TichelProvider = ({ id, children }) => {
   }
 
   const sortTichel = (currentTichel) => {
+    let creationId = getCreationId(currentTichel.id)
+
     return {
       ...currentTichel,
+      creationId: creationId,
       times: currentTichel.times
         .slice()
         .sort((a, b) => (a.start > b.start ? 1 : -1)),

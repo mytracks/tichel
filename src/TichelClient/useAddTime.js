@@ -15,11 +15,12 @@ const MUTATION = gql`
   }
 `
 
-const useAddTime = (tichelId) =>
+const useAddTime = (tichelId, creationId) =>
   useMutation(MUTATION, {
     context: {
       headers: {
         'X-Hasura-Tichel-Id': tichelId,
+        'X-Hasura-Tichel-Creation-Id': creationId,
       },
     },
   })
