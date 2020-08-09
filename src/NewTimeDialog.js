@@ -124,6 +124,7 @@ const NewTimeDialog = withStyles(styles)(({ open, onClose, classes }) => {
               step: 300, // 5 min
             }}
             onChange={handleStartDayChange}
+            autoFocus
           />
           <TextField
             className={classes.textField}

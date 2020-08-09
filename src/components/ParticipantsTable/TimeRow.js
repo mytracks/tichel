@@ -1,6 +1,8 @@
-import { Box, Checkbox, Container, Typography } from '@material-ui/core'
+import { Checkbox, Typography } from '@material-ui/core'
+import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { v4 as uuid } from 'uuid'
 import {
   getParticipationType,
@@ -24,7 +26,7 @@ const styles = (theme) => ({
     borderLeftWidth: '0px',
     borderRightWidth: '0px',
     borderBottomWidth: '1px',
-    padding: '4px',
+    padding: '8px',
   },
   dateContainer: {
     width: '100px',
@@ -48,6 +50,7 @@ const styles = (theme) => ({
 })
 
 const TimeRow = withStyles(styles)(({ classes, participant, time }) => {
+  const { t } = useTranslation()
   const dispatch = useDispatchContext()
   const tichel = useTichelContext()
   const [addParticipationMutation] = useAddParticipation(tichel.id)
@@ -56,9 +59,9 @@ const TimeRow = withStyles(styles)(({ classes, participant, time }) => {
   const handleParticipationChange = () => {
     let times = []
 
-    for (const t of tichel.times) {
-      if (t.id !== time.id) {
-        times.push(t)
+    for (const ti of tichel.times) {
+      if (ti.id !== time.id) {
+        times.push(ti)
       } else {
         let participations = []
         let didParticipate = false
@@ -68,11 +71,9 @@ const TimeRow = withStyles(styles)(({ classes, participant, time }) => {
           } else {
             // participant already takes part
             didParticipate = true
-            if (false) {
-              deleteParticipationMutation({
-                variables: { id: participation.id },
-              })
-            }
+            deleteParticipationMutation({
+              variables: { id: participation.id },
+            })
           }
         }
 
@@ -87,14 +88,16 @@ const TimeRow = withStyles(styles)(({ classes, participant, time }) => {
 
           participations.push(newParticipation)
 
-          if (false) {
-            addParticipationMutation({
-              variables: { participantId: participant.id, timesId: time.id },
-            })
-          }
+          addParticipationMutation({
+            variables: {
+              participantId: participant.id,
+              timesId: time.id,
+              id: newParticipation.id,
+            },
+          })
         }
 
-        let newTime = { ...t }
+        let newTime = { ...ti }
         newTime.participations = participations
 
         times.push(newTime)
@@ -110,37 +113,52 @@ const TimeRow = withStyles(styles)(({ classes, participant, time }) => {
   const start = new Date(time.start)
   const end = new Date(time.end)
   const participationType = getParticipationType(participant, time)
+  const participantCount = time.participations.length
+
+  let participantsText = ''
+  if (participantCount === 1) {
+    participantsText = t('1 participant')
+  } else if (participantCount > 1) {
+    participantsText = t(`${participantCount} participants`)
+  }
 
   let canChange = getSelfId(tichel.id) === participant.id
 
   return (
-    <Box className={classes.root} display="flex">
-      <Container className={classes.dateContainer}>
-        <Typography className={classes.month} align="center">
-          {getShortMonth(start)}
-        </Typography>
-        <Typography className={classes.day} align="center">
-          {getDayMonth(start)}
-        </Typography>
-        <Typography className={classes.dayOfWeek} align="center">
-          {getDayOfWeek(start)}
-        </Typography>
-      </Container>
-      <Container>
-        <Typography>
-          {getHHMM(start)} - {getHHMM(end)}
-        </Typography>
-      </Container>
-      <Container className={classes.checkboxContainer}>
-        <Checkbox
-          className={classes.greenCheckbox}
-          checked={participationType !== 0}
-          onClick={handleParticipationChange}
-          color="primary"
-          disabled={!canChange}
-        ></Checkbox>
-      </Container>
-    </Box>
+    <Grid item xs={12} sm={6} md={3}>
+      <Grid container direction="row" justify="flex-start" spacing={0}>
+        <Grid item xs={3}>
+          <Typography className={classes.month} align="center">
+            {getShortMonth(start)}
+          </Typography>
+          <Typography className={classes.day} align="center">
+            {getDayMonth(start)}
+          </Typography>
+          <Typography className={classes.dayOfWeek} align="center">
+            {getDayOfWeek(start)}
+          </Typography>
+          {/* </Container>
+      <Container> */}
+        </Grid>
+        <Grid item xs={6}>
+          <Typography>
+            {getHHMM(start)} - {getHHMM(end)}
+          </Typography>
+          <Typography>{participantsText}</Typography>
+          {/* </Container>
+      <Container className={classes.checkboxContainer}> */}
+        </Grid>
+        <Grid item xs={3}>
+          <Checkbox
+            className={classes.greenCheckbox}
+            checked={participationType !== 0}
+            onClick={handleParticipationChange}
+            color="primary"
+            disabled={!canChange}
+          />
+        </Grid>
+      </Grid>
+    </Grid>
   )
 })
 

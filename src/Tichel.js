@@ -1,6 +1,5 @@
 import { Container } from '@material-ui/core'
 import Button from '@material-ui/core/Button'
-import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import CardHeader from '@material-ui/core/CardHeader'
@@ -18,11 +17,16 @@ import { useTichelContext } from './providers/TichelProvider'
 import { getCreationId, getSelfId } from './utils/storage'
 
 const styles = (theme) => ({
-  root: {},
+  root: {
+    margin: 'auto',
+    padding: '0px',
+  },
+  card: {},
   button: {
-    margin: '4px',
+    // margin: 'auto',
   },
   cardContent: {
+    padding: '4px',
     margin: 'auto',
   },
 })
@@ -77,68 +81,68 @@ const Tichel = withStyles(styles)(({ classes }) => {
   let canAddTimes = creationId !== null
 
   return (
-    <Container maxWidth="sm">
-      <Card raised>
-        <CardHeader
-          // avatar={
-          //   <Avatar aria-label="recipe">
-          //     {tichel.title.toUpperCase().slice(0, 1)}
-          //   </Avatar>
-          // }
-          // action={
-          //   <IconButton aria-label="settings">
-          //     <MoreVertIcon />
-          //   </IconButton>
-          // }
-          title={tichel.title}
-          // subheader="September 14, 2016"
-        />
-        <CardContent className={classes.cardContent}>
-          <Grid container justify="center">
-            <Grid item xs={12}>
-              {tichel.times.length > 0 && <ParticipantsTable tichel={tichel} />}
-            </Grid>
-            <Grid item xs={12}>
-              {canAddTimes && (
-                <Button
-                  className={classes.button}
-                  variant="contained"
-                  color="primary"
-                  onClick={handleOpenNewTimeDialog}
-                >
-                  <Trans>Add time option</Trans>
-                </Button>
-              )}
-              {canAddSelf && (
-                <Button
-                  className={classes.button}
-                  variant="contained"
-                  color="primary"
-                  onClick={handleOpenNewParticipantDialog}
-                >
-                  <Trans>Add yourself</Trans>
-                </Button>
-              )}
-            </Grid>
+    <Container maxWidth="lg" className={classes.root}>
+      <CardHeader
+        // avatar={
+        //   <Avatar aria-label="recipe">
+        //     {tichel.title.toUpperCase().slice(0, 1)}
+        //   </Avatar>
+        // }
+        // action={
+        //   <IconButton aria-label="settings">
+        //     <MoreVertIcon />
+        //   </IconButton>
+        // }
+        title={tichel.title}
+        // subheader="September 14, 2016"
+      />
+      <CardContent className={classes.cardContent}>
+        <Grid container justify="center" direction="row" alignItems="center">
+          <Grid item xs={12}>
+            {tichel.times.length > 0 && <ParticipantsTable tichel={tichel} />}
           </Grid>
-        </CardContent>
-        <CardActions disableSpacing>
-          <IconButton
-            aria-label="Copy Tichel's link to clipboard"
-            onClick={handleCopyToClipboard}
-          >
-            <LinkIcon />
-          </IconButton>
-        </CardActions>
-        <NewTimeDialog
-          open={showNewTimeDialog}
-          onClose={handleNewTimeDialogClose}
-        />
-        <NewParticipantDialog
-          open={showNewParticipantDialog}
-          onClose={handleNewParticipantDialogClose}
-        />
-      </Card>
+          {canAddTimes && (
+            <Grid item xs={12} sm={6} align="center">
+              <Button
+                className={classes.button}
+                variant="contained"
+                color="primary"
+                onClick={handleOpenNewTimeDialog}
+              >
+                <Trans>Add time option</Trans>
+              </Button>
+            </Grid>
+          )}
+          {canAddSelf && (
+            <Grid item xs={12} sm={6} align="center">
+              <Button
+                className={classes.button}
+                variant="contained"
+                color="primary"
+                onClick={handleOpenNewParticipantDialog}
+              >
+                <Trans>Add yourself</Trans>
+              </Button>
+            </Grid>
+          )}
+        </Grid>
+      </CardContent>
+      <CardActions disableSpacing>
+        <IconButton
+          aria-label="Copy Tichel's link to clipboard"
+          onClick={handleCopyToClipboard}
+        >
+          <LinkIcon />
+        </IconButton>
+      </CardActions>
+      <NewTimeDialog
+        open={showNewTimeDialog}
+        onClose={handleNewTimeDialogClose}
+      />
+      <NewParticipantDialog
+        open={showNewParticipantDialog}
+        onClose={handleNewParticipantDialogClose}
+      />
     </Container>
   )
 })

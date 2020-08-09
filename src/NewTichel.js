@@ -8,7 +8,7 @@ import { Trans, useTranslation } from 'react-i18next'
 import { Redirect } from 'react-router-dom'
 import { v4 as uuid } from 'uuid'
 import useNewTichel from './TichelClient/useNewTichel'
-import { setCreationId } from './utils/storage'
+import { setCreationId, setSelfId } from './utils/storage'
 
 const styles = (theme) => ({
   root: {
@@ -44,7 +44,7 @@ const NewTichel = withStyles(styles)(({ classes }) => {
   const [title, setTitle] = useState('')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
-  const [id, setId] = useState('')
+  const [ids, setIds] = useState()
 
   const handleTitleChanged = (event) => {
     setTitle(event.target.value)
@@ -75,14 +75,16 @@ const NewTichel = withStyles(styles)(({ classes }) => {
     event.preventDefault()
   }
 
-  const tichelCreated = ({ id }) => {
-    setId(id)
+  const tichelCreated = (ids) => {
+    setIds(ids)
   }
 
   const newTichelId = uuid()
   const [newTichel] = useNewTichel(newTichelId, tichelCreated)
 
-  if (id) {
+  if (ids) {
+    const { id, participantId } = ids
+    setSelfId(id, participantId)
     return <Redirect to={'/tichel/' + id} />
   }
 
@@ -108,6 +110,7 @@ const NewTichel = withStyles(styles)(({ classes }) => {
               type="text"
               defaultValue=""
               onChange={handleTitleChanged}
+              autoFocus
             />
             <TextField
               className={classes.textField}

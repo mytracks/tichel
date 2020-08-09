@@ -1,9 +1,18 @@
 import { gql, useMutation } from '@apollo/client'
 
 const MUTATION = gql`
-  mutation AddParticipation($participantId: uuid!, $timesId: uuid!) {
+  mutation AddParticipation(
+    $id: uuid!
+    $participantId: uuid!
+    $timesId: uuid!
+  ) {
     insert_participants2times_one(
-      object: { participant_id: $participantId, times_id: $timesId, type: 1 }
+      object: {
+        id: $id
+        participant_id: $participantId
+        times_id: $timesId
+        type: 1
+      }
     ) {
       id
     }

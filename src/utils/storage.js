@@ -32,6 +32,7 @@ const setValue = (tichelId, type, value) => {
     try {
       let key = `${tichelId}_${type}`
       storage.setItem(key, value)
+      return
     } catch (e) {}
   }
   console.log('storage not available')
@@ -55,8 +56,8 @@ const getValue = (tichelId, type) => {
 const setCreationId = (tichelId, creationId) =>
   setValue(tichelId, 'creation_id', creationId)
 const getCreationId = (tichelId) => getValue(tichelId, 'creation_id')
-const setSelfId = (tichelId, creationId) =>
-  setValue(tichelId, 'self_id', creationId)
+const setSelfId = (tichelId, participantId) =>
+  setValue(tichelId, 'self_id', participantId)
 const getSelfId = (tichelId) => getValue(tichelId, 'self_id')
 
 export { setCreationId, getCreationId, setSelfId, getSelfId }

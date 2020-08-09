@@ -84,6 +84,7 @@ const NewParticipantDialog = withStyles(styles)(
                 shrink: true,
               }}
               onChange={handleNameChange}
+              autoFocus
             />
           </div>
         </DialogContent>
