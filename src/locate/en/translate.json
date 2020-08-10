@@ -14,6 +14,8 @@
     "Add": "Add",
     "New Time Option": "New Time Option",
     "Add yourself": "Add yourself",
-    "Add yourself to this Tichel": "Add yourself to this Tichel"
+    "Add yourself to this Tichel": "Add yourself to this Tichel",
+    "1 participant": "1 participant",
+    "x_participants": "{{participantCount}} participants"
   }
 }

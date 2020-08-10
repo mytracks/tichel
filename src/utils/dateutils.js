@@ -67,6 +67,7 @@ const dayOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sam']
 const getShortMonth = (date) => shortMonths[date.getMonth()]
 const getDayMonth = (date) => date.getDate()
 const getDayOfWeek = (date) => dayOfWeek[date.getDay()]
+const getYear = (date) => date.getFullYear()
 
 export {
   getHHMM,
@@ -75,4 +76,5 @@ export {
   getShortMonth,
   getDayMonth,
   getDayOfWeek,
+  getYear,
 }

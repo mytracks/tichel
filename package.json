@@ -36,7 +36,8 @@
     "eject": "react-scripts eject",
     "builddocker": "docker build -t mytracks/tichel .",
     "rundocker": "docker run -ti --rm -p 8081:80 mytracks/tichel",
-    "pushdocker": "docker push mytracks/tichel"
+    "push": "docker push mytracks/tichel",
+    "k8s": "kubectl delete pod -n tichel-backend -l app=frontend"
   },
   "eslintConfig": {
     "extends": "react-app"

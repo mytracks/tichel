@@ -14,6 +14,8 @@
     "Add": "Hinzufügen",
     "New Time Option": "Neue Zeitoption",
     "Add yourself": "Füge dich hinzu",
-    "Add yourself to this Tichel": "Füge dich zu diesem Tichel hinzu"
+    "Add yourself to this Tichel": "Füge dich zu diesem Tichel hinzu",
+    "1 participant": "1 Teilnehmer",
+    "x_participants": "{{participantCount}} Teilnehmer"
   }
 }

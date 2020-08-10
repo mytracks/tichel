@@ -11,13 +11,8 @@ import {
 } from '../../providers/TichelProvider'
 import useAddParticipation from '../../TichelClient/useAddParticipation'
 import useDeleteParticipation from '../../TichelClient/useDeleteParticipation'
-import {
-  getDayMonth,
-  getDayOfWeek,
-  getHHMM,
-  getShortMonth,
-} from '../../utils/dateutils'
 import { getSelfId } from '../../utils/storage'
+import TimeCell from './TimeCell'
 
 const styles = (theme) => ({
   root: {
@@ -26,7 +21,7 @@ const styles = (theme) => ({
     borderLeftWidth: '0px',
     borderRightWidth: '0px',
     borderBottomWidth: '1px',
-    padding: '8px',
+    padding: '0px',
   },
   dateContainer: {
     width: '100px',
@@ -46,6 +41,10 @@ const styles = (theme) => ({
   },
   checkboxContainer: {
     width: '100px',
+  },
+  cell: {
+    padding: theme.spacing(0),
+    marginBottom: theme.spacing(8),
   },
 })
 
@@ -119,15 +118,29 @@ const TimeRow = withStyles(styles)(({ classes, participant, time }) => {
   if (participantCount === 1) {
     participantsText = t('1 participant')
   } else if (participantCount > 1) {
-    participantsText = t(`${participantCount} participants`)
+    participantsText = t('x_participants', {
+      participantCount: `${participantCount}`,
+    })
   }
 
-  let canChange = getSelfId(tichel.id) === participant.id
+  participantsText = `${participantCount}`
+
+  const canChange = getSelfId(tichel.id) === participant.id
 
   return (
     <Grid item xs={12} sm={6} md={3}>
-      <Grid container direction="row" justify="flex-start" spacing={0}>
-        <Grid item xs={3}>
+      <Grid container direction="row" justify="flex-start">
+        <TimeCell
+          startString={time.start}
+          withYear={true}
+          className={classes.cell}
+        />
+        <TimeCell
+          startString={time.end}
+          withYear={true}
+          className={classes.cell}
+        />
+        {/* <Grid item xs={3}>
           <Typography className={classes.month} align="center">
             {getShortMonth(start)}
           </Typography>
@@ -137,20 +150,16 @@ const TimeRow = withStyles(styles)(({ classes, participant, time }) => {
           <Typography className={classes.dayOfWeek} align="center">
             {getDayOfWeek(start)}
           </Typography>
-          {/* </Container>
-      <Container> */}
-        </Grid>
-        <Grid item xs={6}>
-          <Typography>
+        </Grid> */}
+        <Grid item xs={2}>
+          {/* <Typography>
             {getHHMM(start)} - {getHHMM(end)}
-          </Typography>
-          <Typography>{participantsText}</Typography>
-          {/* </Container>
-      <Container className={classes.checkboxContainer}> */}
+          </Typography> */}
+          <Typography className={classes.cell}>{participantsText}</Typography>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={2}>
           <Checkbox
-            className={classes.greenCheckbox}
+            className={classes.cell}
             checked={participationType !== 0}
             onClick={handleParticipationChange}
             color="primary"
