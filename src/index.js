@@ -1,5 +1,7 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
-//import CssBaseline from '@material-ui/core/CssBaseline'
+import MomentUtils from '@date-io/moment'
+import { MuiPickersUtilsProvider } from '@material-ui/pickers'
+import 'moment/locale/de'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { I18nextProvider } from 'react-i18next'
@@ -30,16 +32,18 @@ const client = new ApolloClient({
 const element = (
   <ApolloProvider client={client}>
     <I18nextProvider i18n={i18n}>
-      {/* <CssBaseline /> */}
-      <Router>
-        <Switch>
-          <Redirect exact={true} from="/" to="/new/" />
-          <Route exact={true} path="/new" component={NewTichel} />
-          <Route exact={true} path="/main" component={Main} />
-          <Route path="/tichel/:id" component={TichelPage} />
-        </Switch>
-      </Router>
-      <Footer />
+      <MuiPickersUtilsProvider utils={MomentUtils}>
+        {/* <CssBaseline /> */}
+        <Router>
+          <Switch>
+            <Redirect exact={true} from="/" to="/new/" />
+            <Route exact={true} path="/new" component={NewTichel} />
+            <Route exact={true} path="/main" component={Main} />
+            <Route path="/tichel/:id" component={TichelPage} />
+          </Switch>
+        </Router>
+        <Footer />
+      </MuiPickersUtilsProvider>
     </I18nextProvider>
   </ApolloProvider>
 )

@@ -1,10 +1,11 @@
+import { FormControl, FormGroup, FormLabel } from '@material-ui/core'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { withStyles } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField'
+import { DateTimePicker } from '@material-ui/pickers'
 import moment from 'moment'
 import React, { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
@@ -20,19 +21,29 @@ const styles = (theme) => ({
     fullWidth: true,
     margin: theme.spacing(1),
   },
+  formControl: {
+    margin: 'auto',
+    width: '100%',
+    padding: '0px 0px 20px 0px',
+  },
 })
 
 const NewTimeDialog = withStyles(styles)(({ open, onClose, classes }) => {
   const { t } = useTranslation()
   const dispatch = useDispatchContext()
   const tichel = useTichelContext()
-  const now = new moment()
-  const [startDay, setStartDay] = useState(now.format('YYYY-MM-DD'))
-  const [startTime, setStartTime] = useState(now.format('HH:mm:ss'))
-  const [endDay, setEndDay] = useState(now.format('YYYY-MM-DD'))
-  const [endTime, setEndTime] = useState(now.format('HH:mm:ss'))
   const [isValid, setIsValid] = useState(true)
   const [addTimeMutation] = useAddTime(tichel.id, tichel.creationId)
+
+  const initialStart = moment().add(1, 'd')
+  initialStart.hour(9)
+  initialStart.minutes(0)
+  initialStart.seconds(0)
+
+  const initialEnd = moment(initialStart).add(1, 'h')
+
+  const [startDateTime, setStartDateTime] = useState(initialStart)
+  const [endDateTime, setEndDateTime] = useState(initialEnd)
 
   const handleCancel = () => {
     onClose()
@@ -58,46 +69,38 @@ const NewTimeDialog = withStyles(styles)(({ open, onClose, classes }) => {
     }
   }
 
-  const handleStartDayChange = (event) => {
-    setStartDay(event.target.value)
-
-    parse()
-  }
-
-  const handleStartTimeChange = (event) => {
-    setStartTime(event.target.value)
-
-    parse()
-  }
-
-  const handleEndDayChange = (event) => {
-    setEndDay(event.target.value)
-
-    parse()
-  }
-
-  const handleEndTimeChange = (event) => {
-    setEndTime(event.target.value)
-
-    parse()
-  }
-
   const parse = () => {
-    const start = moment(`${startDay}T${startTime}`)
-    let end = moment(`${endDay}T${endTime}`)
+    console.log('start: ' + startDateTime)
+    console.log('end: ' + endDateTime)
 
-    if (end < start) {
-      setEndDay(startDay)
-      setEndTime(startTime)
-    }
-
-    if (start && end) {
+    if (startDateTime && endDateTime) {
       setIsValid(true)
-      return { start: start.toISOString(), end: end.toISOString() }
+      return {
+        start: startDateTime.toISOString(),
+        end: endDateTime.toISOString(),
+      }
     }
 
     return null
   }
+
+  const handleStartAccepted = (newStartDateTime) => {
+    if (endDateTime <= newStartDateTime) {
+      setEndDateTime(moment(newStartDateTime).add(1, 'h'))
+    }
+  }
+
+  const handleEndAccepted = (newEndDateTime) => {
+    if (startDateTime >= newEndDateTime) {
+      setStartDateTime(moment(newEndDateTime).add(-1, 'h'))
+    }
+  }
+
+  const formatDate = (date, invalidLabel) => {
+    return date.format('LLL')
+  }
+
+  const ampm = moment.locale() !== 'de'
 
   return (
     <Dialog
@@ -109,68 +112,33 @@ const NewTimeDialog = withStyles(styles)(({ open, onClose, classes }) => {
         <Trans>New Time Option</Trans>
       </DialogTitle>
       <DialogContent>
-        {/* <DialogContentText></DialogContentText> */}
-        <div>
-          <TextField
-            className={classes.textField}
-            id="startday"
-            label={t('Start')}
-            type="date"
-            defaultValue={startDay}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            inputProps={{
-              step: 300, // 5 min
-            }}
-            onChange={handleStartDayChange}
-            autoFocus
-          />
-          <TextField
-            className={classes.textField}
-            id="starttime"
-            label={t('Time')}
-            type="time"
-            defaultValue={startTime}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            inputProps={{
-              step: 300, // 5 min
-            }}
-            onChange={handleStartTimeChange}
-          />
-        </div>
-        <div>
-          <TextField
-            className={classes.textField}
-            id="endday"
-            label={t('End')}
-            type="date"
-            defaultValue={endDay}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            inputProps={{
-              step: 300, // 5 min
-            }}
-            onChange={handleEndDayChange}
-          />
-          <TextField
-            className={classes.textField}
-            id="endtime"
-            label={t('Time')}
-            type="time"
-            defaultValue={endTime}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            inputProps={{
-              step: 300, // 5 min
-            }}
-            onChange={handleEndTimeChange}
-          />
-        </div>
+        <FormControl component="fieldset" className={classes.formControl}>
+          <FormLabel component="legend">{t('Start')}</FormLabel>
+          <FormGroup>
+            <DateTimePicker
+              value={startDateTime}
+              onChange={setStartDateTime}
+              labelFunc={formatDate}
+              disablePast
+              ampm={ampm}
+              onAccept={handleStartAccepted}
+            />
+          </FormGroup>
+        </FormControl>
+        <FormControl component="fieldset" className={classes.formControl}>
+          <FormLabel component="legend">{t('End')}</FormLabel>
+          <FormGroup>
+            <DateTimePicker
+              value={endDateTime}
+              onChange={setEndDateTime}
+              labelFunc={formatDate}
+              minDate={startDateTime}
+              disablePast
+              ampm={ampm}
+              onAccept={handleEndAccepted}
+            />
+          </FormGroup>
+        </FormControl>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleCancel} color="primary">

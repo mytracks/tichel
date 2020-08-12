@@ -1,6 +1,7 @@
 import { Checkbox, Typography } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
+import moment from 'moment'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { v4 as uuid } from 'uuid'
@@ -12,7 +13,9 @@ import {
 import useAddParticipation from '../../TichelClient/useAddParticipation'
 import useDeleteParticipation from '../../TichelClient/useDeleteParticipation'
 import { getSelfId } from '../../utils/storage'
-import TimeCell from './TimeCell'
+import TimeCellArbitrary from './TimeCellArbitrary'
+import TimeCellSameDay from './TimeCellSameDay'
+import TimeCellSameMonth from './TimeCellSameMonth'
 
 const styles = (theme) => ({
   root: {
@@ -43,12 +46,12 @@ const styles = (theme) => ({
     width: '100px',
   },
   cell: {
-    padding: theme.spacing(0),
-    marginBottom: theme.spacing(8),
+    // padding: theme.spacing(0),
+    // marginBottom: theme.spacing(4),
   },
 })
 
-const TimeRow = withStyles(styles)(({ classes, participant, time }) => {
+const TimeRow = withStyles(styles)(({ classes, participant, time, config }) => {
   const { t } = useTranslation()
   const dispatch = useDispatchContext()
   const tichel = useTichelContext()
@@ -109,8 +112,6 @@ const TimeRow = withStyles(styles)(({ classes, participant, time }) => {
     })
   }
 
-  const start = new Date(time.start)
-  const end = new Date(time.end)
   const participationType = getParticipationType(participant, time)
   const participantCount = time.participations.length
 
@@ -127,19 +128,46 @@ const TimeRow = withStyles(styles)(({ classes, participant, time }) => {
 
   const canChange = getSelfId(tichel.id) === participant.id
 
+  const start = moment(time.start)
+  const end = moment(time.end)
+
+  const sameDay = config.sameDay
+  const sameMonth = !sameDay && config.sameMonth
+  const arbitrary = !config.sameMonth
+
   return (
     <Grid item xs={12} sm={6} md={3}>
-      <Grid container direction="row" justify="flex-start">
-        <TimeCell
-          startString={time.start}
-          withYear={true}
-          className={classes.cell}
-        />
-        <TimeCell
-          startString={time.end}
-          withYear={true}
-          className={classes.cell}
-        />
+      <Grid container direction="row" justify="flex-start" alignItems="center">
+        {sameDay && (
+          <>
+            <TimeCellSameDay
+              start={start}
+              end={end}
+              className={classes.cell}
+              config={config}
+            />
+          </>
+        )}
+        {sameMonth && (
+          <>
+            <TimeCellSameMonth
+              start={start}
+              end={end}
+              className={classes.cell}
+              config={config}
+            />
+          </>
+        )}
+        {arbitrary && (
+          <>
+            <TimeCellArbitrary
+              start={start}
+              end={end}
+              className={classes.cell}
+              config={config}
+            />
+          </>
+        )}
         {/* <Grid item xs={3}>
           <Typography className={classes.month} align="center">
             {getShortMonth(start)}
@@ -157,7 +185,7 @@ const TimeRow = withStyles(styles)(({ classes, participant, time }) => {
           </Typography> */}
           <Typography className={classes.cell}>{participantsText}</Typography>
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={1}>
           <Checkbox
             className={classes.cell}
             checked={participationType !== 0}
