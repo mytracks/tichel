@@ -73,6 +73,7 @@ const Participant = withStyles(styles)(({ classes, times, participant }) => {
           direction="row"
           justify="flex-start"
           alignItems="center"
+          spacing={1}
         >
           {times.map((time) => (
             <TimeRow

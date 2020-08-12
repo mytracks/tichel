@@ -18,36 +18,13 @@ import TimeCellSameDay from './TimeCellSameDay'
 import TimeCellSameMonth from './TimeCellSameMonth'
 
 const styles = (theme) => ({
-  root: {
-    border: 'solid lightgrey',
+  innerGrid: {
+    border: 'solid #aaaaaa',
     borderTopWidth: '0px',
     borderLeftWidth: '0px',
     borderRightWidth: '0px',
     borderBottomWidth: '1px',
-    padding: '0px',
-  },
-  dateContainer: {
-    width: '100px',
-  },
-  day: {
-    fontSize: '1.2em',
-    fontWeight: 'bold',
-    padding: '0px',
-    margin: '-0.2em 0px -0.2em 0px',
-  },
-  month: {
-    fontSize: '0.8em',
-  },
-  dayOfWeek: {
-    fontSize: '0.8em',
-    color: 'lightgrey',
-  },
-  checkboxContainer: {
-    width: '100px',
-  },
-  cell: {
-    // padding: theme.spacing(0),
-    // marginBottom: theme.spacing(4),
+    backgroundColor: '#F9F9F9',
   },
 })
 
@@ -136,58 +113,34 @@ const TimeRow = withStyles(styles)(({ classes, participant, time, config }) => {
   const arbitrary = !config.sameMonth
 
   return (
-    <Grid item xs={12} sm={6} md={3}>
-      <Grid container direction="row" justify="flex-start" alignItems="center">
+    <Grid item xs={12} sm={6} lg={4}>
+      <Grid
+        container
+        direction="row"
+        justify="flex-start"
+        alignItems="center"
+        className={classes.innerGrid}
+      >
         {sameDay && (
           <>
-            <TimeCellSameDay
-              start={start}
-              end={end}
-              className={classes.cell}
-              config={config}
-            />
+            <TimeCellSameDay start={start} end={end} config={config} />
           </>
         )}
         {sameMonth && (
           <>
-            <TimeCellSameMonth
-              start={start}
-              end={end}
-              className={classes.cell}
-              config={config}
-            />
+            <TimeCellSameMonth start={start} end={end} config={config} />
           </>
         )}
         {arbitrary && (
           <>
-            <TimeCellArbitrary
-              start={start}
-              end={end}
-              className={classes.cell}
-              config={config}
-            />
+            <TimeCellArbitrary start={start} end={end} config={config} />
           </>
         )}
-        {/* <Grid item xs={3}>
-          <Typography className={classes.month} align="center">
-            {getShortMonth(start)}
-          </Typography>
-          <Typography className={classes.day} align="center">
-            {getDayMonth(start)}
-          </Typography>
-          <Typography className={classes.dayOfWeek} align="center">
-            {getDayOfWeek(start)}
-          </Typography>
-        </Grid> */}
-        <Grid item xs={2}>
-          {/* <Typography>
-            {getHHMM(start)} - {getHHMM(end)}
-          </Typography> */}
-          <Typography className={classes.cell}>{participantsText}</Typography>
+        <Grid item xs={1}>
+          <Typography>{participantsText}</Typography>
         </Grid>
         <Grid item xs={1}>
           <Checkbox
-            className={classes.cell}
             checked={participationType !== 0}
             onClick={handleParticipationChange}
             color="primary"
