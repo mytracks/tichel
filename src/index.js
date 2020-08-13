@@ -14,7 +14,6 @@ import {
 import Footer from './components/Footer/Footer'
 import i18n from './i18n'
 import './index.css'
-import Main from './Main'
 import NewTichel from './NewTichel'
 import * as serviceWorker from './serviceWorker'
 import TichelPage from './TichelPage'
@@ -33,12 +32,10 @@ const element = (
   <ApolloProvider client={client}>
     <I18nextProvider i18n={i18n}>
       <MuiPickersUtilsProvider utils={MomentUtils}>
-        {/* <CssBaseline /> */}
         <Router>
           <Switch>
             <Redirect exact={true} from="/" to="/new/" />
             <Route exact={true} path="/new" component={NewTichel} />
-            <Route exact={true} path="/main" component={Main} />
             <Route path="/tichel/:id" component={TichelPage} />
           </Switch>
         </Router>

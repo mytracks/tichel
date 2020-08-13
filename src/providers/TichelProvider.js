@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer } from 'react'
+import React, { createContext, useContext, useReducer, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import useGetTichel from '../TichelClient/useGetTichel'
 import { getCreationId } from '../utils/storage'
@@ -37,6 +37,13 @@ const getParticipationType = (participant, time) => {
 }
 
 const TichelProvider = ({ id, children }) => {
+  const [previousTichel, setPreviousTichel] = useState('')
+
+  const { loading, error, data, refetch } = useGetTichel(id, ({ tichel }) => {
+    console.log('tichelLoaded')
+    //    dispatch({ type: 'tichelLoaded', payload: tichel })
+  })
+
   const sortTichel = (tichel) => {
     let creationId = getCreationId(tichel.id) ?? uuid()
 
@@ -79,15 +86,24 @@ const TichelProvider = ({ id, children }) => {
             { start: start, end: end, id: timeId, participations: [] },
           ],
         })
+      case 'refresh':
+        refetch()
+
+        return currentTichel
       default:
         throw new Error()
     }
   }
 
   const [tichel, dispatch] = useReducer(reducer, null)
-  /*const { loading, error } =*/ useGetTichel(id, ({ tichel }) => {
-    dispatch({ type: 'tichelLoaded', payload: tichel })
-  })
+
+  if (data && data !== previousTichel) {
+    setPreviousTichel(data)
+    if (data.tichels && data.tichels.length > 0) {
+      const tichel = data.tichels[0]
+      dispatch({ type: 'tichelLoaded', payload: tichel })
+    }
+  }
 
   return (
     <TichelContext.Provider value={tichel}>

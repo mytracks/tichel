@@ -7,13 +7,17 @@ import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
 import { withStyles } from '@material-ui/core/styles'
 import LinkIcon from '@material-ui/icons/Link'
+import RefreshIcon from '@material-ui/icons/Refresh'
 import copyToClipboard from 'copy-to-clipboard'
 import React, { useState } from 'react'
 import { Trans } from 'react-i18next'
 import ParticipantsTable from './components/ParticipantsTable/ParticipantsTable'
 import NewParticipantDialog from './NewParticipantDialog'
 import NewTimeDialog from './NewTimeDialog'
-import { useTichelContext } from './providers/TichelProvider'
+import {
+  useDispatchContext,
+  useTichelContext,
+} from './providers/TichelProvider'
 import { getCreationId, getSelfId } from './utils/storage'
 
 const styles = (theme) => ({
@@ -33,6 +37,7 @@ const styles = (theme) => ({
 
 const Tichel = withStyles(styles)(({ classes }) => {
   const tichel = useTichelContext()
+  const dispatch = useDispatchContext()
 
   const handleOpenNewTimeDialog = () => {
     setShowNewTimeDialog(true)
@@ -55,6 +60,10 @@ const Tichel = withStyles(styles)(({ classes }) => {
     const baseUrl = getUrl.protocol + '//' + getUrl.host
     const url = `${baseUrl}/tichel/${tichel.id}`
     copyToClipboard(url)
+  }
+
+  const handleRefresh = () => {
+    dispatch({ type: 'refresh', payload: {} })
   }
 
   const [showNewTimeDialog, setShowNewTimeDialog] = useState(false)
@@ -133,6 +142,12 @@ const Tichel = withStyles(styles)(({ classes }) => {
           onClick={handleCopyToClipboard}
         >
           <LinkIcon />
+        </IconButton>
+        <IconButton
+          aria-label="Copy Tichel's link to clipboard"
+          onClick={handleRefresh}
+        >
+          <RefreshIcon />
         </IconButton>
       </CardActions>
       <NewTimeDialog

@@ -33,9 +33,11 @@ const useGetTichel = (tichelId, onCompleted) => {
         'X-Hasura-Tichel-Id': tichelId,
       },
     },
-    onCompleted: ({ tichels }) => {
-      onCompleted({ tichel: tichels[0] })
-    },
+    notifyOnNetworkStatusChange: true,
+    // pollInterval: 5000,
+    // onCompleted: ({ tichels }) => {
+    //   onCompleted({ tichel: tichels[0] })
+    // },
   })
 }
 
