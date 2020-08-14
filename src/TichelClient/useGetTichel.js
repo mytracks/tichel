@@ -25,8 +25,7 @@ const QUERY = gql`
   }
 `
 
-// { loading, error, data }
-const useGetTichel = (tichelId, onCompleted) => {
+const useGetTichel = (tichelId) => {
   return useQuery(QUERY, {
     context: {
       headers: {
@@ -34,10 +33,6 @@ const useGetTichel = (tichelId, onCompleted) => {
       },
     },
     notifyOnNetworkStatusChange: true,
-    // pollInterval: 5000,
-    // onCompleted: ({ tichels }) => {
-    //   onCompleted({ tichel: tichels[0] })
-    // },
   })
 }
 

@@ -39,10 +39,7 @@ const getParticipationType = (participant, time) => {
 const TichelProvider = ({ id, children }) => {
   const [previousTichel, setPreviousTichel] = useState('')
 
-  const { loading, error, data, refetch } = useGetTichel(id, ({ tichel }) => {
-    console.log('tichelLoaded')
-    //    dispatch({ type: 'tichelLoaded', payload: tichel })
-  })
+  const { loading, error, data, refetch } = useGetTichel(id)
 
   const sortTichel = (tichel) => {
     let creationId = getCreationId(tichel.id) ?? uuid()
@@ -100,8 +97,7 @@ const TichelProvider = ({ id, children }) => {
   if (data && data !== previousTichel) {
     setPreviousTichel(data)
     if (data.tichels && data.tichels.length > 0) {
-      const tichel = data.tichels[0]
-      dispatch({ type: 'tichelLoaded', payload: tichel })
+      dispatch({ type: 'tichelLoaded', payload: data.tichels[0] })
     }
   }
 
