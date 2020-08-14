@@ -1,0 +1,20 @@
+{
+  "name": "tichelmailer",
+  "version": "1.0.0",
+  "description": "tichelmailer",
+  "author": "Dirk Stichling <dirk@stichling.info>",
+  "license": "MIT",
+  "main": "server.js",
+  "scripts": {
+    "start": "export SMTP_USERNAME=robot@tichel.de && export SMTP_PASSWORD=eiNwOrt64-foo-Bar && node server.js",
+    "builddocker": "docker build -t mytracks/tichelmailer .",
+    "rundocker": "docker run -ti --rm -p 8082:8082 mytracks/tichelmailer",
+    "push": "docker push mytracks/tichelmailer"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.16.1",
+    "nodemailer": "^6.4.11",
+    "path": "^0.12.7"
+  }
+}
