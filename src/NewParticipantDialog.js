@@ -78,13 +78,11 @@ const NewParticipantDialog = withStyles(styles)(
               className={classes.textField}
               id="name"
               label={t('Your Name')}
-              type="string"
+              type="text"
               defaultValue={name}
-              InputLabelProps={{
-                shrink: true,
-              }}
               onChange={handleNameChange}
               autoFocus
+              inputProps={{ maxLength: 128 }}
             />
           </div>
         </DialogContent>

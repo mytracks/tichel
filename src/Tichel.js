@@ -163,9 +163,6 @@ const Tichel = withStyles(styles)(({ classes }) => {
           <IconButton aria-label="Reload data" onClick={handleRefresh}>
             <RefreshIcon />
           </IconButton>
-          <IconButton aria-label="Invite a friend" onClick={handleInvite}>
-            <EmojiPeopleIcon />
-          </IconButton>
         </CardActions>
         <NewTimeDialog
           open={showNewTimeDialog}

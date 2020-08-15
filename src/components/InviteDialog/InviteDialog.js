@@ -81,11 +81,9 @@ const InviteDialog = withStyles(styles)(({ open, classes, onClose }) => {
             className={classes.textField}
             id="email"
             label={t('E-mail address of your friend')}
-            type="string"
+            type="email"
             defaultValue={email}
-            InputLabelProps={{
-              shrink: true,
-            }}
+            inputProps={{ maxLength: 128 }}
             onChange={handleEmailChange}
             autoFocus
           />

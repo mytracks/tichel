@@ -1,6 +1,7 @@
 import { Typography } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import React from 'react'
+import { Trans } from 'react-i18next'
 
 const styles = (theme) => ({
   footer: {
@@ -15,8 +16,9 @@ const styles = (theme) => ({
 const Footer = withStyles(styles)(({ classes }) => {
   return (
     <Typography className={classes.footer} align="center">
-      Made with <span className={classes.heart}>❤</span> by Dirk in Paderborn,
-      Germany.
+      <Trans>MADE_HEART_1</Trans>
+      <span className={classes.heart}>❤</span>
+      <Trans>MADE_HEART_2</Trans>
     </Typography>
   )
 })

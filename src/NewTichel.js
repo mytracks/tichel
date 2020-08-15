@@ -17,7 +17,7 @@ const styles = (theme) => ({
     },
   },
   outerDiv: {
-    margin: '8px',
+    margin: '5vmin',
   },
   paper: {
     margin: 'auto',
@@ -27,7 +27,8 @@ const styles = (theme) => ({
     color: theme.palette.text.sendondary,
   },
   textField: {
-    fullWidth: true,
+    width: '100%',
+    maxWidth: '480px',
     margin: theme.spacing(1),
   },
   footer: {
@@ -139,6 +140,7 @@ const NewTichel = withStyles(styles)(({ classes }) => {
               defaultValue=""
               onChange={handleTitleChanged}
               autoFocus
+              inputProps={{ maxLength: 128 }}
             />
             <TextField
               className={classes.textField}
@@ -147,14 +149,16 @@ const NewTichel = withStyles(styles)(({ classes }) => {
               type="text"
               defaultValue=""
               onChange={handleNameChanged}
+              inputProps={{ maxLength: 128 }}
             />
             <TextField
               className={classes.textField}
               id="email"
               label={t('E-Mail')}
-              type="text"
+              type="email"
               defaultValue=""
               onChange={handleEmailChanged}
+              inputProps={{ maxLength: 128 }}
             />
           </div>
           <div>
