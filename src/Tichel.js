@@ -2,16 +2,19 @@ import { Container } from '@material-ui/core'
 import Button from '@material-ui/core/Button'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
-import CardHeader from '@material-ui/core/CardHeader'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
 import { withStyles } from '@material-ui/core/styles'
+import AccessTimeIcon from '@material-ui/icons/AccessTime'
+import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople'
 import LinkIcon from '@material-ui/icons/Link'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import copyToClipboard from 'copy-to-clipboard'
 import React, { useState } from 'react'
 import { Trans } from 'react-i18next'
+import InviteDialog from './components/InviteDialog/InviteDialog'
 import ParticipantsTable from './components/ParticipantsTable/ParticipantsTable'
+import TichelAppBar from './components/TichelAppBar/TichelAppBar'
 import NewParticipantDialog from './NewParticipantDialog'
 import NewTimeDialog from './NewTimeDialog'
 import {
@@ -27,7 +30,7 @@ const styles = (theme) => ({
   },
   card: {},
   button: {
-    // margin: 'auto',
+    margin: '8px',
   },
   cardContent: {
     padding: '4px',
@@ -66,11 +69,20 @@ const Tichel = withStyles(styles)(({ classes }) => {
     dispatch({ type: 'refresh', payload: {} })
   }
 
+  const handleInvite = () => {
+    setShowInviteDialog(true)
+  }
+
+  const handleInviteDialogClose = () => {
+    setShowInviteDialog(false)
+  }
+
   const [showNewTimeDialog, setShowNewTimeDialog] = useState(false)
   const [autoShowNewTimeDialog, setAutoShowNewTimeDialog] = useState(true)
   const [showNewParticipantDialog, setShowNewParticipantDialog] = useState(
     false
   )
+  const [showInviteDialog, setShowInviteDialog] = useState(false)
 
   if (tichel?.times.length === 0 && autoShowNewTimeDialog) {
     setShowNewTimeDialog(true)
@@ -90,75 +102,85 @@ const Tichel = withStyles(styles)(({ classes }) => {
   let canAddTimes = creationId !== null
 
   return (
-    <Container maxWidth="lg" className={classes.root}>
-      <CardHeader
-        // avatar={
-        //   <Avatar aria-label="recipe">
-        //     {tichel.title.toUpperCase().slice(0, 1)}
-        //   </Avatar>
-        // }
-        // action={
-        //   <IconButton aria-label="settings">
-        //     <MoreVertIcon />
-        //   </IconButton>
-        // }
-        title={tichel.title}
-        // subheader="September 14, 2016"
-      />
-      <CardContent className={classes.cardContent}>
-        <Grid container justify="center" direction="row" alignItems="center">
-          <Grid item xs={12}>
-            {tichel.times.length > 0 && <ParticipantsTable tichel={tichel} />}
+    <>
+      <TichelAppBar />
+
+      <Container maxWidth="md" className={classes.root}>
+        {/* <CardHeader title={tichel.title} /> */}
+        <CardContent className={classes.cardContent}>
+          <Grid container justify="center" direction="row" alignItems="center">
+            <Grid item xs={12}>
+              {tichel.times.length > 0 && <ParticipantsTable tichel={tichel} />}
+            </Grid>
+            {canAddTimes && (
+              <Grid item xs={12} align="right">
+                <Button
+                  className={classes.button}
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleOpenNewTimeDialog}
+                  startIcon={<AccessTimeIcon />}
+                >
+                  <Trans>Add time option</Trans>
+                </Button>
+              </Grid>
+            )}
+            {canAddSelf && (
+              <Grid item xs={12} align="right">
+                <Button
+                  className={classes.button}
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleOpenNewParticipantDialog}
+                >
+                  <Trans>Add yourself</Trans>
+                </Button>
+              </Grid>
+            )}
+            {!canAddSelf && (
+              <Grid item xs={12} align="right">
+                <Button
+                  // fullWidth={true}
+                  className={classes.button}
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleInvite}
+                  startIcon={<EmojiPeopleIcon />}
+                >
+                  <Trans>Invite a friend</Trans>
+                </Button>
+              </Grid>
+            )}
           </Grid>
-          {canAddTimes && (
-            <Grid item xs={12} sm={6} align="center">
-              <Button
-                className={classes.button}
-                variant="contained"
-                color="primary"
-                onClick={handleOpenNewTimeDialog}
-              >
-                <Trans>Add time option</Trans>
-              </Button>
-            </Grid>
-          )}
-          {canAddSelf && (
-            <Grid item xs={12} sm={6} align="center">
-              <Button
-                className={classes.button}
-                variant="contained"
-                color="primary"
-                onClick={handleOpenNewParticipantDialog}
-              >
-                <Trans>Add yourself</Trans>
-              </Button>
-            </Grid>
-          )}
-        </Grid>
-      </CardContent>
-      <CardActions disableSpacing>
-        <IconButton
-          aria-label="Copy Tichel's link to clipboard"
-          onClick={handleCopyToClipboard}
-        >
-          <LinkIcon />
-        </IconButton>
-        <IconButton
-          aria-label="Copy Tichel's link to clipboard"
-          onClick={handleRefresh}
-        >
-          <RefreshIcon />
-        </IconButton>
-      </CardActions>
-      <NewTimeDialog
-        open={showNewTimeDialog}
-        onClose={handleNewTimeDialogClose}
-      />
-      <NewParticipantDialog
-        open={showNewParticipantDialog}
-        onClose={handleNewParticipantDialogClose}
-      />
-    </Container>
+        </CardContent>
+        <CardActions disableSpacing>
+          <IconButton
+            aria-label="Copy Tichel's link to clipboard"
+            onClick={handleCopyToClipboard}
+          >
+            <LinkIcon />
+          </IconButton>
+          <IconButton aria-label="Reload data" onClick={handleRefresh}>
+            <RefreshIcon />
+          </IconButton>
+          <IconButton aria-label="Invite a friend" onClick={handleInvite}>
+            <EmojiPeopleIcon />
+          </IconButton>
+        </CardActions>
+        <NewTimeDialog
+          open={showNewTimeDialog}
+          onClose={handleNewTimeDialogClose}
+        />
+        <NewParticipantDialog
+          open={showNewParticipantDialog}
+          onClose={handleNewParticipantDialogClose}
+        />
+        <InviteDialog
+          open={showInviteDialog}
+          onClose={handleInviteDialogClose}
+        />
+      </Container>
+    </>
   )
 })
 

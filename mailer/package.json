@@ -9,10 +9,12 @@
     "start": "export SMTP_USERNAME=robot@tichel.de && export SMTP_PASSWORD=eiNwOrt64-foo-Bar && node server.js",
     "builddocker": "docker build -t mytracks/tichelmailer .",
     "rundocker": "docker run -ti --rm -p 8082:8082 mytracks/tichelmailer",
-    "push": "docker push mytracks/tichelmailer"
+    "push": "docker push mytracks/tichelmailer",
+    "k8s": "kubectl delete pod -n tichel-backend -l app=mailer"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "express": "^4.16.1",
     "nodemailer": "^6.4.11",
     "path": "^0.12.7"

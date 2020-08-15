@@ -25,13 +25,8 @@ const MUTATION = gql`
 `
 
 // [ newTichel, { newTichelData } ]
-const useNewTichel = (tichelId, onCompleted) =>
+const useNewTichel = (onCompleted) =>
   useMutation(MUTATION, {
-    context: {
-      headers: {
-        'X-Hasura-Tichel-Id': tichelId,
-      },
-    },
     onCompleted: ({ insert_tichel_one }) => {
       onCompleted({
         id: insert_tichel_one.id,

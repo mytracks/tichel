@@ -1,5 +1,4 @@
 const storageAvailable = (storage) => {
-  return true
   try {
     const x = '__storage_test__'
 

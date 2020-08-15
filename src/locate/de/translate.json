@@ -16,6 +16,11 @@
     "Add yourself": "Füge dich hinzu",
     "Add yourself to this Tichel": "Füge dich zu diesem Tichel hinzu",
     "1 participant": "1 Teilnehmer",
-    "x_participants": "{{participantCount}} Teilnehmer"
+    "x_participants": "{{participantCount}} Teilnehmer",
+    "E-mail address of your friend": "E-Mail-Adresse deines Freundes",
+    "Send": "Senden",
+    "Invite a friend to this Tichel": "Lade einen Freund ein",
+    "Invite a friend": "Lade einen Freund ein",
+    "New": "Neu"
   }
 }

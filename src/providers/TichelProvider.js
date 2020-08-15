@@ -39,7 +39,7 @@ const getParticipationType = (participant, time) => {
 const TichelProvider = ({ id, children }) => {
   const [previousTichel, setPreviousTichel] = useState('')
 
-  const { loading, error, data, refetch } = useGetTichel(id)
+  const { data, refetch } = useGetTichel(id)
 
   const sortTichel = (tichel) => {
     let creationId = getCreationId(tichel.id) ?? uuid()
@@ -93,6 +93,11 @@ const TichelProvider = ({ id, children }) => {
   }
 
   const [tichel, dispatch] = useReducer(reducer, null)
+
+  if (tichel && tichel.id !== id) {
+    // id has changed
+    refetch()
+  }
 
   if (data && data !== previousTichel) {
     setPreviousTichel(data)

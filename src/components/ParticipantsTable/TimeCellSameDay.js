@@ -3,7 +3,6 @@ import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles'
 import React from 'react'
-import { useTranslation } from 'react-i18next'
 
 const styles = (theme) => ({
   root: {},
@@ -31,8 +30,6 @@ const styles = (theme) => ({
 
 const TimeCellSameDay = withStyles(styles)(
   ({ classes, start, end, config }) => {
-    const { t } = useTranslation()
-
     return (
       <>
         <Grid item xs={2}>

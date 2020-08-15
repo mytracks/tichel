@@ -1,9 +1,9 @@
 'use strict'
 
 const express = require('express')
-const path = require('path')
 const nodeMailer = require('nodemailer')
 const bodyParser = require('body-parser')
+const cors = require('cors')
 
 // Environment Variables
 const SMTP_USERNAME = process.env.SMTP_USERNAME
@@ -15,6 +15,14 @@ const HOST = '0.0.0.0'
 
 // App
 const app = express()
+
+// Cors
+const corsOptions = {
+  origin: ['https://tichel.de', 'http://localhost:3000'],
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+
+app.use(cors(corsOptions))
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -61,17 +69,16 @@ app.post('/mailer/invite', (req, res) => {
   const tichelId = req.body.tichel_id
   const email = req.body.email
   const title = req.body.title
-  const inviter = req.body.inviter
   const locale = req.body.locale ? req.body.locale.toLowerCase() : 'en'
 
   let text = ''
   let subject = ''
 
   if (locale === 'de') {
-    text = `Hallo.\n\nDu wurdest von ${inviter} zum Tichel '${title}' eingeladen. Klicke auf den folgenden Link, um dir den Tichel anzusehen:\nhttps://tichel.de/tichel/${tichelId}\n\nDein Tichel.de Roboter\n`
+    text = `Hallo.\n\nDu wurdest von zum Tichel '${title}' eingeladen. Klicke auf den folgenden Link, um dir den Tichel anzusehen:\nhttps://tichel.de/tichel/${tichelId}\n\nDein Tichel.de Roboter\n`
     subject = `Du wurdest zum Tichel '${title}' eingeladen`
   } else {
-    text = `Hello.\n\nYou have been invited by ${inviter} to Tichel '${title}'. Click on the following link to open this Tichel:\nhttps://tichel.de/tichel/${tichelId}\n\nYour Tichel.de Robot\n`
+    text = `Hello.\n\nYou have been invited to Tichel '${title}'. Click on the following link to open this Tichel:\nhttps://tichel.de/tichel/${tichelId}\n\nYour Tichel.de Robot\n`
     subject = `You have been invited to Tichel '${title}'`
   }
 

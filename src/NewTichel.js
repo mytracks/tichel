@@ -58,18 +58,46 @@ const NewTichel = withStyles(styles)(({ classes }) => {
     setEmail(event.target.value)
   }
 
+  const sendMail = ({ title, tichelId, creationId, email }) => {
+    if (email.length > 0) {
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: title,
+          tichel_id: tichelId,
+          email: email,
+          creation_id: creationId,
+        }),
+      }
+      fetch('https://api.tichel.de/mailer/newtichel', requestOptions)
+      // .then((response) => response.json())
+      // .then((data) => this.setState({ postId: data.id }))
+    }
+  }
+
   const handleNewTichel = (event) => {
     let creationId = uuid()
+    const newTichelId = uuid()
 
     setCreationId(newTichelId, creationId)
 
+    const variables = {
+      title: title,
+      tichelId: newTichelId,
+      creationId: creationId,
+      name: name,
+      email: email,
+    }
+
+    sendMail(variables)
+
     newTichel({
-      variables: {
-        title: title,
-        tichelId: newTichelId,
-        creationId: creationId,
-        name: name,
-        email: email,
+      variables: variables,
+      context: {
+        headers: {
+          'X-Hasura-Tichel-Id': newTichelId,
+        },
       },
     })
     event.preventDefault()
@@ -79,12 +107,12 @@ const NewTichel = withStyles(styles)(({ classes }) => {
     setIds(ids)
   }
 
-  const newTichelId = uuid()
-  const [newTichel] = useNewTichel(newTichelId, tichelCreated)
+  const [newTichel] = useNewTichel(tichelCreated)
 
   if (ids) {
     const { id, participantId } = ids
     setSelfId(id, participantId)
+
     return <Redirect to={'/tichel/' + id} />
   }
 

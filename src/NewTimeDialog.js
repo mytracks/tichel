@@ -52,8 +52,6 @@ const NewTimeDialog = withStyles(styles)(({ open, onClose, classes }) => {
   const handleCreate = () => {
     const payload = parse()
 
-    console.log('handleCreate')
-
     if (payload) {
       const timeId = uuid()
       addTimeMutation({
@@ -70,9 +68,6 @@ const NewTimeDialog = withStyles(styles)(({ open, onClose, classes }) => {
   }
 
   const parse = () => {
-    console.log('start: ' + startDateTime)
-    console.log('end: ' + endDateTime)
-
     if (startDateTime && endDateTime) {
       setIsValid(true)
       return {
