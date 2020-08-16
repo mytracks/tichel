@@ -5,6 +5,7 @@ const MUTATION = gql`
     $title: String!
     $tichelId: uuid!
     $creationId: uuid!
+    $participantId: uuid!
     $name: String!
     $email: String!
   ) {
@@ -13,7 +14,9 @@ const MUTATION = gql`
         title: $title
         id: $tichelId
         creation_id: $creationId
-        participants: { data: { email: $email, name: $name } }
+        participants: {
+          data: { email: $email, name: $name, id: $participantId }
+        }
       }
     ) {
       id

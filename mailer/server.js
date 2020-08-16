@@ -90,16 +90,17 @@ app.post('/mailer/newtichel', (req, res) => {
   const email = req.body.email
   const title = req.body.title
   const creationId = req.body.creation_id
+  const participantId = req.body.participant_id
   const locale = req.body.locale ? req.body.locale.toLowerCase() : 'en'
 
   let text = ''
   let subject = ''
 
   if (locale === 'de') {
-    text = `Hallo.\n\nDu hast den neuen Tichel '${title}' erstellt. Über den folgenden Link kommst du auf deine persönliche Seite, auf der du den Tichel editieren kannst:\nhttps://tichel.de/tichel/${tichelId}?creation_id=${creationId}\n\nWenn du Freunde zu dem Tichel einladen möchtest, dann verwende bitte den folgenden Link:\nhttps://tichel.de/tichel/${tichelId}\n\nDein Tichel.de Roboter\n`
+    text = `Hallo.\n\nDu hast den neuen Tichel '${title}' erstellt. Über den folgenden Link kommst du auf deine persönliche Seite, auf der du den Tichel editieren kannst:\nhttps://tichel.de/tichel/${tichelId}?creation_id=${creationId}&participant_id=${participantId}\n\nWenn du Freunde zu dem Tichel einladen möchtest, dann verteile bitte den folgenden Link:\nhttps://tichel.de/tichel/${tichelId}\n\nDein Tichel.de Roboter\n`
     subject = `Neuer Tichel '${title}'`
   } else {
-    text = `Hello.\n\nYou created the new Tichel '${title}'. Click on the following link to open your personal page to view and edit this Tichel:\nhttps://tichel.de/tichel/${tichelId}?creation_id=${creationId}\n\nIf you want to invite friends to this tichel, please use the following link:\nhttps://tichel.de/tichel/${tichelId}\n\nYour Tichel.de Robot\n`
+    text = `Hello.\n\nYou created the new Tichel '${title}'. Click on the following link to open your personal page to view and edit this Tichel:\nhttps://tichel.de/tichel/${tichelId}?creation_id=${creationId}&participant_id=${participantId}\n\nIf you want to invite friends to this tichel, please share the following link:\nhttps://tichel.de/tichel/${tichelId}\n\nYour Tichel.de Robot\n`
     subject = `New Tichel '${title}'`
   }
 

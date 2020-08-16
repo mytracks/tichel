@@ -59,7 +59,7 @@ const NewTichel = withStyles(styles)(({ classes }) => {
     setEmail(event.target.value)
   }
 
-  const sendMail = ({ title, tichelId, creationId, email }) => {
+  const sendMail = ({ title, tichelId, creationId, email, participantId }) => {
     if (email.length > 0) {
       const requestOptions = {
         method: 'POST',
@@ -69,6 +69,7 @@ const NewTichel = withStyles(styles)(({ classes }) => {
           tichel_id: tichelId,
           email: email,
           creation_id: creationId,
+          participant_id: participantId,
         }),
       }
       fetch('https://api.tichel.de/mailer/newtichel', requestOptions)
@@ -78,8 +79,9 @@ const NewTichel = withStyles(styles)(({ classes }) => {
   }
 
   const handleNewTichel = (event) => {
-    let creationId = uuid()
+    const creationId = uuid()
     const newTichelId = uuid()
+    const participantId = uuid()
 
     setCreationId(newTichelId, creationId)
 
@@ -87,6 +89,7 @@ const NewTichel = withStyles(styles)(({ classes }) => {
       title: title,
       tichelId: newTichelId,
       creationId: creationId,
+      participantId: participantId,
       name: name,
       email: email,
     }

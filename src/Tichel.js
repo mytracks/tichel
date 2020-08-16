@@ -12,6 +12,8 @@ import RefreshIcon from '@material-ui/icons/Refresh'
 import copyToClipboard from 'copy-to-clipboard'
 import React, { useState } from 'react'
 import { Trans } from 'react-i18next'
+import { useLocation } from 'react-router-dom'
+import { validate as uuidvalidate } from 'uuid'
 import InviteDialog from './components/InviteDialog/InviteDialog'
 import ParticipantsTable from './components/ParticipantsTable/ParticipantsTable'
 import TichelAppBar from './components/TichelAppBar/TichelAppBar'
@@ -21,7 +23,12 @@ import {
   useDispatchContext,
   useTichelContext,
 } from './providers/TichelProvider'
-import { getCreationId, getSelfId } from './utils/storage'
+import {
+  getCreationId,
+  getSelfId,
+  setCreationId,
+  setSelfId,
+} from './utils/storage'
 
 const styles = (theme) => ({
   root: {
@@ -38,9 +45,14 @@ const styles = (theme) => ({
   },
 })
 
+const useQueryParameters = () => {
+  return new URLSearchParams(useLocation().search)
+}
+
 const Tichel = withStyles(styles)(({ classes }) => {
   const tichel = useTichelContext()
   const dispatch = useDispatchContext()
+  const queryParameters = useQueryParameters()
 
   const handleOpenNewTimeDialog = () => {
     setShowNewTimeDialog(true)
@@ -93,13 +105,30 @@ const Tichel = withStyles(styles)(({ classes }) => {
     return null
   }
 
+  const currentCreationId = getCreationId(tichel.id)
+  const queryCreationId = queryParameters.get('creation_id')
+  if (queryCreationId && uuidvalidate(queryCreationId)) {
+    if (queryCreationId !== currentCreationId) {
+      console.log('refreshCreationId')
+      setCreationId(tichel.id, queryCreationId)
+      setTimeout(() => {
+        dispatch({ type: 'refreshCreationId', payload: {} })
+      })
+    }
+  }
+
+  const participantId = queryParameters.get('participant_id')
+  if (participantId && uuidvalidate(participantId)) {
+    setSelfId(tichel.id, participantId)
+  }
+
   let selfId = getSelfId(tichel.id)
   let canAddSelf =
     selfId === null ||
     tichel.participants.filter((p) => p.id === selfId).length === 0
 
-  let creationId = getCreationId(tichel.id)
-  let canAddTimes = creationId !== null
+  const creationId = getCreationId(tichel.id)
+  const canAddTimes = creationId !== null
 
   return (
     <>

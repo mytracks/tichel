@@ -53,6 +53,8 @@ const TichelProvider = ({ id, children }) => {
 
   const reducer = (currentTichel, action) => {
     switch (action.type) {
+      case 'refreshCreationId':
+        return sortTichel(currentTichel)
       case 'tichelLoaded':
         return sortTichel(action.payload)
       case 'changeParticipation':
