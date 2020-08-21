@@ -46,6 +46,7 @@ const NewTichel = withStyles(styles)(({ classes }) => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [ids, setIds] = useState()
+  const [doRedirect, setDoRedirect] = useState(false)
 
   const handleTitleChanged = (event) => {
     setTitle(event.target.value)
@@ -72,8 +73,11 @@ const NewTichel = withStyles(styles)(({ classes }) => {
           participant_id: participantId,
         }),
       }
-      fetch('https://api.tichel.de/mailer/newtichel', requestOptions)
-      // .then((response) => response.json())
+      fetch(
+        'https://api.tichel.de/mailer/newtichel',
+        requestOptions
+      ).then((reponse) => {})
+      //.then((response) => response.json())
       // .then((data) => this.setState({ postId: data.id }))
     }
   }
@@ -115,9 +119,13 @@ const NewTichel = withStyles(styles)(({ classes }) => {
 
   if (ids) {
     const { id, participantId } = ids
-    setSelfId(id, participantId)
 
-    return <Redirect to={'/tichel/' + id} />
+    if (doRedirect) {
+      return <Redirect to={'/tichel/' + id} />
+    }
+
+    setSelfId(id, participantId)
+    setDoRedirect(true)
   }
 
   const canCreate = title.length > 0 && name.length > 0
