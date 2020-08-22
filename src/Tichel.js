@@ -132,7 +132,7 @@ const Tichel = withStyles(styles)(({ classes }) => {
 
   return (
     <>
-      <TichelAppBar />
+      <TichelAppBar title={tichel.title} />
 
       <Container maxWidth="md" className={classes.root}>
         {/* <CardHeader title={tichel.title} /> */}

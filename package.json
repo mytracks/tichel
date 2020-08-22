@@ -31,10 +31,10 @@
     "uuid": "^8.3.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "rescripts start",
+    "build": "rescripts build",
+    "test": "rescripts test",
+    "eject": "rescripts eject",
     "builddocker": "docker build -t mytracks/tichel .",
     "rundocker": "docker run -ti --rm -p 8081:80 mytracks/tichel",
     "push": "docker push mytracks/tichel",
@@ -56,6 +56,9 @@
     ]
   },
   "devDependencies": {
+    "@rescripts/cli": "^0.0.14",
+    "@rescripts/rescript-env": "^0.0.12",
+    "@rescripts/utilities": "^0.0.7",
     "@typescript-eslint/parser": "^3.7.1",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-cypress": "^2.11.1",

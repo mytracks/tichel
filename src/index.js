@@ -12,6 +12,7 @@ import {
   Switch,
 } from 'react-router-dom'
 import Footer from './components/Footer/Footer'
+import Licenses from './components/Licenses/Licenses'
 import i18n from './i18n'
 import './index.css'
 import NewTichel from './NewTichel'
@@ -36,6 +37,7 @@ const element = (
           <Switch>
             <Redirect exact={true} from="/" to="/new/" />
             <Route exact={true} path="/new" component={NewTichel} />
+            <Route exact={true} path="/licenses" component={Licenses} />
             <Route path="/tichel/:id" component={TichelPage} />
           </Switch>
         </Router>

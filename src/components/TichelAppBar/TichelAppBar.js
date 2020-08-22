@@ -2,7 +2,6 @@ import { AppBar, IconButton, Toolbar, Typography } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import MenuIcon from '@material-ui/icons/Menu'
 import React, { useState } from 'react'
-import { useTichelContext } from '../../providers/TichelProvider'
 import TichelDrawer from '../TichelDrawer/TichelDrawer'
 
 const styles = (theme) => ({
@@ -17,9 +16,8 @@ const styles = (theme) => ({
   },
 })
 
-const TichelAppBar = withStyles(styles)(({ classes }) => {
+const TichelAppBar = withStyles(styles)(({ classes, title }) => {
   const [showMenu, setShowMenu] = useState(false)
-  const tichel = useTichelContext()
 
   const handleMenuClose = () => {
     setShowMenu(false)
@@ -39,7 +37,7 @@ const TichelAppBar = withStyles(styles)(({ classes }) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            {tichel.title}
+            {title}
           </Typography>
         </Toolbar>
       </AppBar>

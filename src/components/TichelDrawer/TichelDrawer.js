@@ -21,6 +21,7 @@ const styles = (theme) => ({
 const TichelDrawer = withStyles(styles)(({ classes, open, onClose }) => {
   const { t } = useTranslation()
   const [redirectNewTichel, setRedirectNewTichel] = useState(false)
+  const [redirectLicenses, setRedirectLicenses] = useState(false)
 
   const toggleDrawer = () => (event) => {
     if (
@@ -48,12 +49,16 @@ const TichelDrawer = withStyles(styles)(({ classes, open, onClose }) => {
           </ListItemIcon>
           <ListItemText primary={t('New')} />
         </ListItem>
-        {/* <ListItem button key="About">
+        <ListItem
+          button
+          key="Licenses"
+          onClick={() => setRedirectLicenses(true)}
+        >
           <ListItemIcon>
-            <InfoIcon />
+            <AddCircleOutlineIcon />
           </ListItemIcon>
-          <ListItemText primary="About" />
-        </ListItem> */}
+          <ListItemText primary={t('Licenses')} />
+        </ListItem>
       </List>
       {/* <Divider /> */}
     </div>
@@ -61,6 +66,10 @@ const TichelDrawer = withStyles(styles)(({ classes, open, onClose }) => {
 
   if (redirectNewTichel) {
     return <Redirect to={'/'} />
+  }
+
+  if (redirectLicenses) {
+    return <Redirect to={'/licenses'} />
   }
 
   return (

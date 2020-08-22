@@ -7,6 +7,7 @@ import React, { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { Redirect } from 'react-router-dom'
 import { v4 as uuid } from 'uuid'
+import TichelAppBar from './components/TichelAppBar/TichelAppBar'
 import useNewTichel from './TichelClient/useNewTichel'
 import { setCreationId, setSelfId } from './utils/storage'
 
@@ -131,60 +132,64 @@ const NewTichel = withStyles(styles)(({ classes }) => {
   const canCreate = title.length > 0 && name.length > 0
 
   return (
-    <div className={classes.outerDiv}>
-      <Paper className={classes.paper} variant="elevation" elevation={8}>
-        <div>
-          <Typography variant="h5" gutterBottom>
-            <Trans>Welcome to Tichel</Trans>
-          </Typography>
-          <Typography variant="caption" gutterBottom>
-            <Trans>What's the occasion?</Trans>
-          </Typography>
-        </div>
-        <form className={classes.root} noValidate autoComplete="off">
+    <>
+      <TichelAppBar title={t('Welcome to Tichel')} />
+
+      <div className={classes.outerDiv}>
+        <Paper className={classes.paper} variant="elevation" elevation={8}>
           <div>
-            <TextField
-              className={classes.textField}
-              id="title"
-              label={t('Title')}
-              type="text"
-              defaultValue=""
-              onChange={handleTitleChanged}
-              autoFocus
-              inputProps={{ maxLength: 128 }}
-            />
-            <TextField
-              className={classes.textField}
-              id="name"
-              label={t('Your Name')}
-              type="text"
-              defaultValue=""
-              onChange={handleNameChanged}
-              inputProps={{ maxLength: 128 }}
-            />
-            <TextField
-              className={classes.textField}
-              id="email"
-              label={t('E-Mail')}
-              type="email"
-              defaultValue=""
-              onChange={handleEmailChanged}
-              inputProps={{ maxLength: 128 }}
-            />
+            {/* <Typography variant="h5" gutterBottom>
+              <Trans>Welcome to Tichel</Trans>
+            </Typography> */}
+            <Typography variant="h5" gutterBottom>
+              <Trans>What's the occasion?</Trans>
+            </Typography>
           </div>
-          <div>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleNewTichel}
-              disabled={!canCreate}
-            >
-              <Trans>Create Tichel</Trans>
-            </Button>
-          </div>
-        </form>
-      </Paper>
-    </div>
+          <form className={classes.root} noValidate autoComplete="off">
+            <div>
+              <TextField
+                className={classes.textField}
+                id="title"
+                label={t('Title')}
+                type="text"
+                defaultValue=""
+                onChange={handleTitleChanged}
+                autoFocus
+                inputProps={{ maxLength: 128 }}
+              />
+              <TextField
+                className={classes.textField}
+                id="name"
+                label={t('Your Name')}
+                type="text"
+                defaultValue=""
+                onChange={handleNameChanged}
+                inputProps={{ maxLength: 128 }}
+              />
+              <TextField
+                className={classes.textField}
+                id="email"
+                label={t('E-Mail')}
+                type="email"
+                defaultValue=""
+                onChange={handleEmailChanged}
+                inputProps={{ maxLength: 128 }}
+              />
+            </div>
+            <div>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleNewTichel}
+                disabled={!canCreate}
+              >
+                <Trans>Create Tichel</Trans>
+              </Button>
+            </div>
+          </form>
+        </Paper>
+      </div>
+    </>
   )
 })
 
