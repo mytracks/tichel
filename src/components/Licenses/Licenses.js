@@ -1,6 +1,6 @@
 import Paper from '@material-ui/core/Paper'
 import { withStyles } from '@material-ui/core/styles'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import TichelAppBar from '../TichelAppBar/TichelAppBar'
 import License from './License'
@@ -18,6 +18,10 @@ const styles = (theme) => ({
 
 const Licenses = withStyles(styles)(({ classes }) => {
   const { t } = useTranslation()
+
+  useEffect(() => {
+    document.title = t('Open Source Licenses')
+  })
 
   return (
     <>

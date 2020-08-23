@@ -6,6 +6,7 @@ const QUERY = gql`
       title
       id
       anyone_can_add_times
+      created_at
       times {
         start
         end

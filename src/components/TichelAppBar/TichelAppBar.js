@@ -9,6 +9,7 @@ import {
 import { withStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
 import GavelIcon from '@material-ui/icons/Gavel'
+import ListIcon from '@material-ui/icons/List'
 import MenuIcon from '@material-ui/icons/Menu'
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline'
 import React, { useState } from 'react'
@@ -86,6 +87,10 @@ const TichelAppBar = withStyles(styles)(({ classes, title }) => {
             <MenuItem onClick={() => handleOpenUrl('/new')}>
               <AddIcon className={classes.menuIcon} />
               <Trans>New Tichel</Trans>
+            </MenuItem>
+            <MenuItem onClick={() => handleOpenUrl('/tichels')}>
+              <ListIcon className={classes.menuIcon} />
+              <Trans>T_YOUR_TICHELS</Trans>
             </MenuItem>
             <MenuItem onClick={() => handleOpenUrl('/licenses')}>
               <GavelIcon className={classes.menuIcon} />

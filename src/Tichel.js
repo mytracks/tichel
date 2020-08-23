@@ -10,7 +10,7 @@ import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople'
 import LinkIcon from '@material-ui/icons/Link'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import copyToClipboard from 'copy-to-clipboard'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 import { validate as uuidvalidate } from 'uuid'
@@ -26,8 +26,10 @@ import {
 import {
   getCreationId,
   getSelfId,
+  setCreatedAt,
   setCreationId,
   setSelfId,
+  setTitle,
 } from './utils/storage'
 
 const styles = (theme) => ({
@@ -101,6 +103,12 @@ const Tichel = withStyles(styles)(({ classes }) => {
     setAutoShowNewTimeDialog(false)
   }
 
+  const windowTitle = tichel ? tichel.title : 'Tichel.de'
+
+  useEffect(() => {
+    document.title = windowTitle
+  })
+
   if (!tichel) {
     return null
   }
@@ -130,6 +138,9 @@ const Tichel = withStyles(styles)(({ classes }) => {
   const creationId = getCreationId(tichel.id)
   const canAddTimes =
     creationId !== null || (tichel.anyone_can_add_times && !canAddSelf)
+
+  setTitle(tichel.id, tichel.title)
+  setCreatedAt(tichel.id, tichel.created_at)
 
   return (
     <>

@@ -15,6 +15,7 @@ import {
 import Contact from './components/Contact/Contact'
 import Footer from './components/Footer/Footer'
 import Licenses from './components/Licenses/Licenses'
+import Tichels from './components/Tichels/Tichels'
 import i18n from './i18n'
 import './index.css'
 import NewTichel from './NewTichel'
@@ -28,17 +29,6 @@ const client = new ApolloClient({
   cache: cache,
   headers: {
     // authorization: `Bearer our-bearer-token`
-  },
-})
-
-const theme1 = createMuiTheme({
-  palette: {
-    primary: {
-      main: '#7b0f4a',
-    },
-    secondary: {
-      main: '#eb7faa',
-    },
   },
 })
 
@@ -64,6 +54,7 @@ const element = (
               <Route exact={true} path="/new" component={NewTichel} />
               <Route exact={true} path="/licenses" component={Licenses} />
               <Route exact={true} path="/contact" component={Contact} />
+              <Route exact={true} path="/tichels" component={Tichels} />
               <Route path="/tichel/:id" component={TichelPage} />
             </Switch>
           </Router>

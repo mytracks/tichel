@@ -1,7 +1,7 @@
 import { Typography } from '@material-ui/core'
 import Paper from '@material-ui/core/Paper'
 import { withStyles } from '@material-ui/core/styles'
-import { default as React } from 'react'
+import { default as React, useEffect } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import TichelAppBar from '../TichelAppBar/TichelAppBar'
 
@@ -17,6 +17,10 @@ const styles = (theme) => ({
 
 const Contact = withStyles(styles)(({ classes }) => {
   const { t } = useTranslation()
+
+  useEffect(() => {
+    document.title = t('T_CONTACT')
+  })
 
   return (
     <>

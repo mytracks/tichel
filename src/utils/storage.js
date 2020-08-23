@@ -58,5 +58,64 @@ const getCreationId = (tichelId) => getValue(tichelId, 'creation_id')
 const setSelfId = (tichelId, participantId) =>
   setValue(tichelId, 'self_id', participantId)
 const getSelfId = (tichelId) => getValue(tichelId, 'self_id')
+const setTitle = (tichelId, title) => setValue(tichelId, 'title', title)
+const getTitle = (tichelId) => getValue(tichelId, 'title')
+const setCreatedAt = (tichelId, createdAt) =>
+  setValue(tichelId, 'created_at', createdAt)
+const getCreatedAt = (tichelId) => getValue(tichelId, 'created_at')
 
-export { setCreationId, getCreationId, setSelfId, getSelfId }
+const getYourTichels = () => {
+  const storage = window['localStorage']
+
+  const res = Object.keys(storage)
+    .filter((key) => {
+      if (key.length > 37) {
+        const type = key.slice(37)
+
+        return type === 'title'
+      }
+
+      return false
+    })
+    .map((key) => {
+      const guid = key.slice(0, 36)
+      const title = storage.getItem(key)
+      const createdAt = getCreatedAt(guid)
+
+      return { guid, title, createdAt }
+    })
+    .slice()
+    .sort((a, b) => {
+      console.log('1')
+      if (a.createdAt && !b.createdAt) {
+        return -1
+      }
+
+      console.log('2')
+      if (!a.createdAt && b.createdAt) {
+        return 1
+      }
+
+      console.log('3')
+      if ((!a.createdAt && !b.createdAt) || a.createdAt === b.createdAt) {
+        return a.title.toLowerCase() >= b.title.toLowerCase() ? 1 : -1
+      }
+
+      console.log('4')
+      return a.createdAt <= b.createdAt ? 1 : -1
+    })
+
+  return res
+}
+
+export {
+  setCreationId,
+  getCreationId,
+  setSelfId,
+  getSelfId,
+  setTitle,
+  getTitle,
+  setCreatedAt,
+  getCreatedAt,
+  getYourTichels,
+}

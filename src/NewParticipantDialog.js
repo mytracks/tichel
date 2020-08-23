@@ -75,6 +75,7 @@ const NewParticipantDialog = withStyles(styles)(
         <DialogContent>
           <div>
             <TextField
+              fullWidth={true}
               className={classes.textField}
               id="name"
               label={t('Your Name')}

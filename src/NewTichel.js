@@ -119,6 +119,8 @@ const NewTichel = withStyles(styles)(({ classes }) => {
   const [newTichel] = useNewTichel(tichelCreated)
 
   useEffect(() => {
+    document.title = t('Create Tichel')
+
     if (ids) {
       const { id, participantId } = ids
 
