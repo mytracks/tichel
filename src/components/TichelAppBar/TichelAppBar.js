@@ -1,8 +1,18 @@
-import { AppBar, IconButton, Toolbar, Typography } from '@material-ui/core'
+import {
+  AppBar,
+  IconButton,
+  Menu,
+  MenuItem,
+  Toolbar,
+  Typography,
+} from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
+import AddIcon from '@material-ui/icons/Add'
+import GavelIcon from '@material-ui/icons/Gavel'
 import MenuIcon from '@material-ui/icons/Menu'
 import React, { useState } from 'react'
-import TichelDrawer from '../TichelDrawer/TichelDrawer'
+import { Trans } from 'react-i18next'
+import { useHistory } from 'react-router-dom'
 
 const styles = (theme) => ({
   root: {
@@ -14,34 +24,81 @@ const styles = (theme) => ({
   title: {
     flexGrow: 1,
   },
+  menuIcon: {
+    padding: '0px 12px 0px 0px',
+  },
 })
 
 const TichelAppBar = withStyles(styles)(({ classes, title }) => {
-  const [showMenu, setShowMenu] = useState(false)
+  const [anchorEl, setAnchorEl] = useState(null)
+  const history = useHistory()
 
-  const handleMenuClose = () => {
-    setShowMenu(false)
+  const closeMenu = () => {
+    setAnchorEl(null)
+  }
+
+  const handleNewTichel = () => {
+    history.push('/new')
+
+    closeMenu()
+  }
+
+  const handleLicenses = () => {
+    history.push('/licenses')
+
+    closeMenu()
+  }
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    closeMenu()
   }
 
   return (
     <>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
-            onClick={() => setShowMenu(!showMenu)}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography variant="h6" className={classes.title}>
             {title}
           </Typography>
+          <IconButton
+            aria-label="main menu"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleMenu}
+            color="inherit"
+          >
+            <MenuIcon />
+          </IconButton>
+          <Menu
+            id="menu-appbar"
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={handleNewTichel}>
+              <AddIcon className={classes.menuIcon} />
+              <Trans>New Tichel</Trans>
+            </MenuItem>
+            <MenuItem onClick={handleLicenses}>
+              <GavelIcon className={classes.menuIcon} />
+              <Trans>Open Source Licenses</Trans>
+            </MenuItem>
+          </Menu>
         </Toolbar>
       </AppBar>
-      <TichelDrawer open={showMenu} onClose={handleMenuClose} />
     </>
   )
 })

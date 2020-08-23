@@ -1,6 +1,6 @@
 {
   "translations": {
-    "Welcome to Tichel": "Welcome to Tichel",
+    "T_WELCOME_TO_TICHEL_DE": "Welcome to Tichel.de",
     "What's the occasion?": "What's the occasion?",
     "Title": "Title",
     "Your Name": "Your Name",
@@ -29,6 +29,7 @@
     "Source:": "Source",
     "Repository:": "Repository:",
     "Version:": "Version:",
-    "Author:": "Author:"
+    "Author:": "Author:",
+    "New Tichel": "New Tichel"
   }
 }

@@ -3,9 +3,9 @@ import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
 import { withStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import { Redirect } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { v4 as uuid } from 'uuid'
 import TichelAppBar from './components/TichelAppBar/TichelAppBar'
 import useNewTichel from './TichelClient/useNewTichel'
@@ -47,7 +47,7 @@ const NewTichel = withStyles(styles)(({ classes }) => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [ids, setIds] = useState()
-  const [doRedirect, setDoRedirect] = useState(false)
+  const history = useHistory()
 
   const handleTitleChanged = (event) => {
     setTitle(event.target.value)
@@ -118,28 +118,27 @@ const NewTichel = withStyles(styles)(({ classes }) => {
 
   const [newTichel] = useNewTichel(tichelCreated)
 
-  if (ids) {
-    const { id, participantId } = ids
+  useEffect(() => {
+    if (ids) {
+      const { id, participantId } = ids
 
-    if (doRedirect) {
-      return <Redirect to={'/tichel/' + id} />
+      setSelfId(id, participantId)
+
+      history.push('/tichel/' + id)
     }
-
-    setSelfId(id, participantId)
-    setDoRedirect(true)
-  }
+  })
 
   const canCreate = title.length > 0 && name.length > 0
 
   return (
     <>
-      <TichelAppBar title={t('Welcome to Tichel')} />
+      <TichelAppBar title={t('T_WELCOME_TO_TICHEL_DE')} />
 
       <div className={classes.outerDiv}>
         <Paper className={classes.paper} variant="elevation" elevation={8}>
           <div>
             {/* <Typography variant="h5" gutterBottom>
-              <Trans>Welcome to Tichel</Trans>
+              <Trans>T_WELCOME_TO_TICHEL_DE</Trans>
             </Typography> */}
             <Typography variant="h5" gutterBottom>
               <Trans>What's the occasion?</Trans>
