@@ -1,5 +1,6 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 import MomentUtils from '@date-io/moment'
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import 'moment/locale/de'
 import React from 'react'
@@ -30,21 +31,45 @@ const client = new ApolloClient({
   },
 })
 
+const theme1 = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#7b0f4a',
+    },
+    secondary: {
+      main: '#eb7faa',
+    },
+  },
+})
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#0f4a7b',
+    },
+    secondary: {
+      main: '#7faaeb',
+    },
+  },
+})
+
 const element = (
   <ApolloProvider client={client}>
     <I18nextProvider i18n={i18n}>
-      <MuiPickersUtilsProvider utils={MomentUtils}>
-        <Router>
-          <Switch>
-            <Redirect exact={true} from="/" to="/new/" />
-            <Route exact={true} path="/new" component={NewTichel} />
-            <Route exact={true} path="/licenses" component={Licenses} />
-            <Route exact={true} path="/contact" component={Contact} />
-            <Route path="/tichel/:id" component={TichelPage} />
-          </Switch>
-        </Router>
-        <Footer />
-      </MuiPickersUtilsProvider>
+      <ThemeProvider theme={theme}>
+        <MuiPickersUtilsProvider utils={MomentUtils}>
+          <Router>
+            <Switch>
+              <Redirect exact={true} from="/" to="/new/" />
+              <Route exact={true} path="/new" component={NewTichel} />
+              <Route exact={true} path="/licenses" component={Licenses} />
+              <Route exact={true} path="/contact" component={Contact} />
+              <Route path="/tichel/:id" component={TichelPage} />
+            </Switch>
+          </Router>
+          <Footer />
+        </MuiPickersUtilsProvider>
+      </ThemeProvider>
     </I18nextProvider>
   </ApolloProvider>
 )

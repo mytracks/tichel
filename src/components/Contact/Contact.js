@@ -31,6 +31,7 @@ const Contact = withStyles(styles)(({ classes }) => {
           <br />
           <Trans>T_GERMANY</Trans>
           <br />
+          <br />
           <Trans>T_TEL</Trans>
           <br />
           <Trans>T_EMAIL</Trans>

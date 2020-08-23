@@ -5,6 +5,7 @@ const QUERY = gql`
     tichels {
       title
       id
+      anyone_can_add_times
       times {
         start
         end

@@ -128,7 +128,8 @@ const Tichel = withStyles(styles)(({ classes }) => {
     tichel.participants.filter((p) => p.id === selfId).length === 0
 
   const creationId = getCreationId(tichel.id)
-  const canAddTimes = creationId !== null
+  const canAddTimes =
+    creationId !== null || (tichel.anyone_can_add_times && !canAddSelf)
 
   return (
     <>

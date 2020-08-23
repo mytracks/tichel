@@ -9,7 +9,7 @@ const styles = (theme) => ({
     backgoundColor: 'red',
   },
   heart: {
-    color: 'red',
+    color: '#aa0000',
   },
 })
 
