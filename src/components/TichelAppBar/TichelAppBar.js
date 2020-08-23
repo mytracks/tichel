@@ -10,6 +10,7 @@ import { withStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
 import GavelIcon from '@material-ui/icons/Gavel'
 import MenuIcon from '@material-ui/icons/Menu'
+import PersonOutlineIcon from '@material-ui/icons/PersonOutline'
 import React, { useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useHistory } from 'react-router-dom'
@@ -37,14 +38,8 @@ const TichelAppBar = withStyles(styles)(({ classes, title }) => {
     setAnchorEl(null)
   }
 
-  const handleNewTichel = () => {
-    history.push('/new')
-
-    closeMenu()
-  }
-
-  const handleLicenses = () => {
-    history.push('/licenses')
+  const handleOpenUrl = (url) => {
+    history.push(url)
 
     closeMenu()
   }
@@ -88,13 +83,17 @@ const TichelAppBar = withStyles(styles)(({ classes, title }) => {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleNewTichel}>
+            <MenuItem onClick={() => handleOpenUrl('/new')}>
               <AddIcon className={classes.menuIcon} />
               <Trans>New Tichel</Trans>
             </MenuItem>
-            <MenuItem onClick={handleLicenses}>
+            <MenuItem onClick={() => handleOpenUrl('/licenses')}>
               <GavelIcon className={classes.menuIcon} />
               <Trans>Open Source Licenses</Trans>
+            </MenuItem>
+            <MenuItem onClick={() => handleOpenUrl('/contact')}>
+              <PersonOutlineIcon className={classes.menuIcon} />
+              <Trans>T_CONTACT</Trans>
             </MenuItem>
           </Menu>
         </Toolbar>

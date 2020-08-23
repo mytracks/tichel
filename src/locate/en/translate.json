@@ -30,6 +30,11 @@
     "Repository:": "Repository:",
     "Version:": "Version:",
     "Author:": "Author:",
-    "New Tichel": "New Tichel"
+    "New Tichel": "New Tichel",
+    "T_CONTACT": "Contact",
+    "T_GERMANY": "Germany",
+    "T_TEL": "Tel: +49 5254 647789 (support requests via email only)",
+    "T_EMAIL": "E-mail: mail@mytracks.support",
+    "T_LEGAL_STUFF": "Some legal stuff required in Germany: Inhaltlich Verantwortlicher gemäß §10 Absatz 3 MDStV: Dr. Dirk Stichling"
   }
 }

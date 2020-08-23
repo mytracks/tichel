@@ -10,8 +10,8 @@ const styles = (theme) => ({
   paper: {
     margin: '20px auto auto auto',
     maxWidth: '800px',
-    padding: theme.spacing(2),
-    textAlign: 'center',
+    padding: theme.spacing(3),
+    textAlign: 'left',
     color: theme.palette.text.sendondary,
   },
 })

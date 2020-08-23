@@ -11,6 +11,7 @@ import {
   Route,
   Switch,
 } from 'react-router-dom'
+import Contact from './components/Contact/Contact'
 import Footer from './components/Footer/Footer'
 import Licenses from './components/Licenses/Licenses'
 import i18n from './i18n'
@@ -38,6 +39,7 @@ const element = (
             <Redirect exact={true} from="/" to="/new/" />
             <Route exact={true} path="/new" component={NewTichel} />
             <Route exact={true} path="/licenses" component={Licenses} />
+            <Route exact={true} path="/contact" component={Contact} />
             <Route path="/tichel/:id" component={TichelPage} />
           </Switch>
         </Router>
